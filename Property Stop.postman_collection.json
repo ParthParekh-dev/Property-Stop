@@ -1,0 +1,235 @@
+{
+	"info": {
+		"_postman_id": "6aaed7a9-e633-47c7-8978-5296e9c1e2b0",
+		"name": "Property Stop",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "1334783"
+	},
+	"item": [
+		{
+			"name": "GenerateToken",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://propertystop.com/",
+					"protocol": "http",
+					"host": [
+						"propertystop",
+						"com"
+					],
+					"path": [
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User Registration",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-CSRFToken",
+						"value": "HrwP2l31UvrdMynte0EnbzRGkG2kktYZN6lg4FWbrpXFPcKEJ78wbcxelGN5T3w0",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "btn_register",
+							"value": "btn_register",
+							"type": "text"
+						},
+						{
+							"key": "field",
+							"value": "",
+							"type": "text"
+						},
+						{
+							"key": "full_name",
+							"value": "Shalini Singh",
+							"type": "text"
+						},
+						{
+							"key": "contact_number",
+							"value": "8291962020",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "shalini754@gmail.com",
+							"type": "text"
+						},
+						{
+							"key": "user_password",
+							"value": "shalini",
+							"type": "text"
+						},
+						{
+							"key": "user_type",
+							"value": "Customer",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://propertystop.com/register-user",
+					"protocol": "http",
+					"host": [
+						"propertystop",
+						"com"
+					],
+					"path": [
+						"register-user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Verify OTP",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-CSRFToken",
+						"value": "HrwP2l31UvrdMynte0EnbzRGkG2kktYZN6lg4FWbrpXFPcKEJ78wbcxelGN5T3w0",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "btn_otp",
+							"value": "btn_otp",
+							"type": "text"
+						},
+						{
+							"key": "field_otp",
+							"value": "",
+							"type": "text"
+						},
+						{
+							"key": "otp_code",
+							"value": "807888",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://propertystop.com/verify-otp",
+					"protocol": "http",
+					"host": [
+						"propertystop",
+						"com"
+					],
+					"path": [
+						"verify-otp"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Resend OTP",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-CSRFToken",
+						"value": "HrwP2l31UvrdMynte0EnbzRGkG2kktYZN6lg4FWbrpXFPcKEJ78wbcxelGN5T3w0",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "resend_otp",
+							"value": "resend_otp",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://propertystop.com/resend-otp",
+					"protocol": "http",
+					"host": [
+						"propertystop",
+						"com"
+					],
+					"path": [
+						"resend-otp"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User Login",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-CSRFToken",
+						"value": "HrwP2l31UvrdMynte0EnbzRGkG2kktYZN6lg4FWbrpXFPcKEJ78wbcxelGN5T3w0",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "btn_login",
+							"value": "btn_login",
+							"type": "text"
+						},
+						{
+							"key": "field_log",
+							"value": "",
+							"type": "text"
+						},
+						{
+							"key": "contact_number",
+							"value": "8291962020",
+							"type": "text"
+						},
+						{
+							"key": "user_password",
+							"value": "shalinisingh",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://propertystop.com/login-user",
+					"protocol": "http",
+					"host": [
+						"propertystop",
+						"com"
+					],
+					"path": [
+						"login-user"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
