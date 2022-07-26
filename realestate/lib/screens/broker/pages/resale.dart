@@ -3,8 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:propertystop/screens/broker/components/property_card.dart';
 import 'package:propertystop/screens/broker/models/client.dart';
 import 'package:propertystop/screens/broker/models/property.dart';
+import 'package:propertystop/screens/broker/resale_client.dart';
+import 'package:propertystop/screens/broker/resale_property.dart';
 import 'package:propertystop/utils/constants.dart' as constants;
-import 'package:propertystop/utils/router.dart';
 
 class ResalePage extends StatefulWidget {
   const ResalePage({Key? key}) : super(key: key);
@@ -205,7 +206,16 @@ class _ResalePageState extends State<ResalePage>
                 ? FloatingActionButton(
                     shape: const StadiumBorder(),
                     onPressed: () {
-                      Navigator.pushNamed(context, resaleProperty);
+                      // Navigator.pushNamed(context, resaleProperty);
+                      showModalBottomSheet<dynamic>(
+                          isScrollControlled: true,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20)),
+                          backgroundColor: Colors.white,
+                          context: context,
+                          builder: (BuildContext bc) {
+                            return Wrap(children: const [ResalePropertyPage()]);
+                          });
                     },
                     backgroundColor: constants.PRIMARY_COLOR,
                     child: const Icon(
@@ -215,7 +225,16 @@ class _ResalePageState extends State<ResalePage>
                 : FloatingActionButton(
                     shape: const StadiumBorder(),
                     onPressed: () {
-                      Navigator.pushNamed(context, resaleClient);
+                      // Navigator.pushNamed(context, resaleClient);
+                      showModalBottomSheet<dynamic>(
+                          isScrollControlled: true,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20)),
+                          backgroundColor: Colors.white,
+                          context: context,
+                          builder: (BuildContext bc) {
+                            return Wrap(children: const [ResaleClientPage()]);
+                          });
                     },
                     backgroundColor: constants.PRIMARY_COLOR,
                     child: const Icon(

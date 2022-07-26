@@ -25,25 +25,19 @@ class _ResalePropertyPageState extends State<ResalePropertyPage> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        FocusScope.of(context).unfocus();
-      },
-      child: AnnotatedRegion<SystemUiOverlayStyle>(
-        value: SystemUiOverlayStyle.dark,
-        child: Scaffold(
-          appBar: AppBar(
-            elevation: 0,
-            title: const Text(
-              "Resale Property",
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.w400,
-                fontSize: 18,
-              ),
-            ),
-          ),
-          body: SafeArea(
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.85,
+      decoration: const BoxDecoration(
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+      ),
+      child: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: AnnotatedRegion<SystemUiOverlayStyle>(
+          value: SystemUiOverlayStyle.dark,
+          child: SafeArea(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
               child: Column(
@@ -120,34 +114,34 @@ class _ResalePropertyPageState extends State<ResalePropertyPage> {
                       ),
                     ),
                   ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 25),
+                    margin: const EdgeInsets.symmetric(vertical: 25),
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        // print(_nearbyPlacesFormKey
+                        //     .currentState?.fields['is_park_garden']?.value);
+                      },
+                      child: const Text(
+                        "Save Details",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                        ),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        primary: constants.PRIMARY_COLOR,
+                        padding: const EdgeInsets.all(12),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          side: BorderSide.none,
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
-              ),
-            ),
-          ),
-          bottomSheet: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 25),
-            margin: const EdgeInsets.symmetric(vertical: 25),
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: () async {
-                // print(_nearbyPlacesFormKey
-                //     .currentState?.fields['is_park_garden']?.value);
-              },
-              child: const Text(
-                "Save Details",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 15,
-                ),
-              ),
-              style: ElevatedButton.styleFrom(
-                primary: constants.PRIMARY_COLOR,
-                padding: const EdgeInsets.all(12),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  side: BorderSide.none,
-                ),
               ),
             ),
           ),

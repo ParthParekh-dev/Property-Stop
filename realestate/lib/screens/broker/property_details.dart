@@ -2,9 +2,12 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 import 'package:propertystop/screens/broker/models/property.dart';
+import 'package:propertystop/screens/property_photos.dart';
+import 'package:propertystop/screens/request_visit_bottomsheet.dart';
+import 'package:propertystop/screens/youtube_videos.dart';
 import 'package:propertystop/utils/constants.dart' as constants;
-import 'package:propertystop/utils/router.dart' as router;
 import 'package:propertystop/utils/custom_dialog.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -190,38 +193,59 @@ class _BrokerPropertyDetailPageState extends State<BrokerPropertyDetailPage> {
                 const SizedBox(
                   height: 12,
                 ),
-                // Property Description
                 Container(
                   color: Colors.white,
-                  padding: const EdgeInsets.all(24.0),
-                  child: Column(
-                    children: [
-                      const Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          "Description",
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 8),
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            widget.property.description,
-                            style: const TextStyle(
-                              color: Color.fromRGBO(0, 0, 0, 0.8),
-                              fontSize: 14,
-                              fontWeight: FontWeight.normal,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 20.0, horizontal: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Expanded(
+                          child: OutlinedButton(
+                            onPressed: () {
+                              Get.to(() => PropertyPhotos());
+                            },
+                            child: const Text(
+                              "Photos",
+                              style: TextStyle(
+                                color: constants.PRIMARY_COLOR,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 12,
+                              ),
+                            ),
+                            style: OutlinedButton.styleFrom(
+                              side: const BorderSide(
+                                  color: constants.PRIMARY_COLOR, width: 1),
+                              padding: const EdgeInsets.all(12.0),
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                        const SizedBox(
+                          width: 20,
+                        ),
+                        Expanded(
+                          child: OutlinedButton(
+                            onPressed: () {
+                              Get.to(() => VideoList());
+                            },
+                            child: const Text(
+                              "Videos",
+                              style: TextStyle(
+                                color: constants.PRIMARY_COLOR,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 12,
+                              ),
+                            ),
+                            style: OutlinedButton.styleFrom(
+                              side: const BorderSide(
+                                  color: constants.PRIMARY_COLOR, width: 1),
+                              padding: const EdgeInsets.all(12.0),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 const SizedBox(
@@ -683,6 +707,43 @@ class _BrokerPropertyDetailPageState extends State<BrokerPropertyDetailPage> {
                 const SizedBox(
                   height: 12,
                 ),
+                // Property Description
+                Container(
+                  color: Colors.white,
+                  padding: const EdgeInsets.all(24.0),
+                  child: Column(
+                    children: [
+                      const Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          "Description",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            widget.property.description,
+                            style: const TextStyle(
+                              color: Color.fromRGBO(0, 0, 0, 0.8),
+                              fontSize: 14,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  height: 12,
+                ),
                 // Builder Information
                 Container(
                   color: Colors.white,
@@ -811,33 +872,86 @@ class _BrokerPropertyDetailPageState extends State<BrokerPropertyDetailPage> {
           padding: const EdgeInsets.symmetric(horizontal: 25),
           margin: const EdgeInsets.symmetric(vertical: 25),
           width: double.infinity,
-          child: ElevatedButton(
-            onPressed: () async {
-              final dialogAction = await Dialogs.yesNoAlertDialog(
-                  "Confirmation",
-                  "Are you sure you want to request for in-person site visit?");
-              if (dialogAction == DialogAction.yes) {
-                Navigator.of(context).pushNamed(
-                  router.requestVisit,
-                );
-              }
-            },
-            child: const Text(
-              "Request Site Visit",
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 15,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              ElevatedButton(
+                onPressed: () async {
+                  final dialogAction = await Dialogs.yesNoAlertDialog(
+                      "Confirmation",
+                      "Are you sure you want to request for in-person site visit?");
+                  if (dialogAction == DialogAction.yes) {
+                    // Navigator.of(context).pushNamed(
+                    //   router.requestVisit,
+                    // );
+                    showModalBottomSheet<dynamic>(
+                        isScrollControlled: true,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20)),
+                        backgroundColor: Colors.white,
+                        context: context,
+                        builder: (BuildContext bc) {
+                          return Wrap(
+                              children: const [RequestVisitBottomSheet()]);
+                        });
+                  }
+                },
+                child: const Text(
+                  "Request Site Visit",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15,
+                  ),
+                ),
+                style: ElevatedButton.styleFrom(
+                  primary: constants.PRIMARY_COLOR,
+                  padding: const EdgeInsets.all(12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    side: BorderSide.none,
+                  ),
+                ),
               ),
-            ),
-            style: ElevatedButton.styleFrom(
-              primary: constants.PRIMARY_COLOR,
-              padding: const EdgeInsets.all(12),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-                side: BorderSide.none,
+              ElevatedButton(
+                onPressed: () async {
+                  final dialogAction = await Dialogs.yesNoAlertDialog(
+                      "Confirmation",
+                      "Are you sure you want to request for in-person site visit?");
+                  if (dialogAction == DialogAction.yes) {
+                    // Navigator.of(context).pushNamed(
+                    //   router.requestVisit,
+                    // );
+                    showModalBottomSheet<dynamic>(
+                        isScrollControlled: true,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20)),
+                        backgroundColor: Colors.white,
+                        context: context,
+                        builder: (BuildContext bc) {
+                          return Wrap(
+                              children: const [RequestVisitBottomSheet()]);
+                        });
+                  }
+                },
+                child: const Text(
+                  "Request Call Back",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15,
+                  ),
+                ),
+                style: ElevatedButton.styleFrom(
+                  primary: constants.PRIMARY_COLOR,
+                  padding: const EdgeInsets.all(12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    side: BorderSide.none,
+                  ),
+                ),
               ),
-            ),
+            ],
           ),
         ),
       ),

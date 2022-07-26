@@ -56,6 +56,7 @@ class Dialogs {
                       Navigator.of(Get.overlayContext!).pop(DialogAction.no);
                     },
                     child: Container(
+                      width: 80,
                       padding: const EdgeInsets.symmetric(
                           vertical: 6, horizontal: 12),
                       margin: const EdgeInsets.symmetric(horizontal: 4),
@@ -63,11 +64,13 @@ class Dialogs {
                         border: Border.all(color: Colors.black),
                         borderRadius: BorderRadius.circular(4),
                       ),
-                      child: const Text(
-                        "No",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 16,
+                      child: const Center(
+                        child: Text(
+                          "No",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 16,
+                          ),
                         ),
                       ),
                     ),
@@ -80,6 +83,7 @@ class Dialogs {
                       Navigator.of(Get.overlayContext!).pop(DialogAction.yes);
                     },
                     child: Container(
+                      width: 80,
                       padding: const EdgeInsets.symmetric(
                           vertical: 6, horizontal: 12),
                       margin: const EdgeInsets.symmetric(horizontal: 4),
@@ -88,11 +92,13 @@ class Dialogs {
                         border: Border.all(color: constants.PRIMARY_COLOR),
                         borderRadius: BorderRadius.circular(4),
                       ),
-                      child: const Text(
-                        "Yes",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
+                      child: const Center(
+                        child: Text(
+                          "Yes",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                          ),
                         ),
                       ),
                     ),

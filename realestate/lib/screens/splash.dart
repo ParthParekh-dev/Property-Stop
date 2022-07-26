@@ -2,10 +2,9 @@ import 'dart:async';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-import 'package:propertystop/utils/router.dart' as router;
 import 'package:propertystop/utils/constants.dart' as constants;
+import 'package:propertystop/utils/router.dart' as router;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -31,13 +30,13 @@ class _SplashScreenState extends State<SplashScreen> {
     bool? isLoggedIn = prefs.getBool(constants.isLoggedIn);
     if (isLoggedIn != null) {
       setState(() {
-        pageName = isLoggedIn ? router.brokerMain : router.introPage;
+        pageName = isLoggedIn ? router.brokerMain : router.brokerMain;
       });
     } else {
       prefs.setString("csrf", csrf ?? "");
       prefs.setString("csrfCookie", resp.headers['set-cookie']?[0] ?? "");
       setState(() {
-        pageName = router.introPage;
+        pageName = router.brokerMain;
       });
     }
 

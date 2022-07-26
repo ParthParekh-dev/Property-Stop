@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:propertystop/screens/broker/models/property.dart';
 import 'package:propertystop/screens/broker/property_details.dart';
+import 'package:propertystop/screens/request_visit_bottomsheet.dart';
 import 'package:propertystop/utils/constants.dart' as constants;
+import 'package:propertystop/utils/custom_dialog.dart';
 
 class BrokerPropertyListCard extends StatelessWidget {
   const BrokerPropertyListCard({Key? key, required this.property})
@@ -13,13 +15,33 @@ class BrokerPropertyListCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => BrokerPropertyDetailPage(
-              property: property,
-            ),
+        Navigator.of(context).push(PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              BrokerPropertyDetailPage(
+            property: property,
           ),
-        );
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            const begin = Offset(1.0, 0.0);
+            const end = Offset.zero;
+            const curve = Curves.ease;
+
+            var tween =
+                Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+            return SlideTransition(
+              position: animation.drive(tween),
+              child: child,
+            );
+          },
+        ));
+
+        // Navigator.of(context).push(
+        //   MaterialPageRoute(
+        //     builder: (context) => BrokerPropertyDetailPage(
+        //       property: property,
+        //     ),
+        //   ),
+        // );
       },
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 20),
@@ -142,7 +164,27 @@ class BrokerPropertyListCard extends StatelessWidget {
                 children: [
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: () async {},
+                      onPressed: () async {
+                        final dialogAction = await Dialogs.yesNoAlertDialog(
+                            "Confirmation",
+                            "Are you sure you want to request for call back from our team?");
+                        if (dialogAction == DialogAction.yes) {
+                          // Navigator.of(context).pushNamed(
+                          //   router.requestVisit,
+                          // );
+                          showModalBottomSheet<dynamic>(
+                              isScrollControlled: true,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20)),
+                              backgroundColor: Colors.white,
+                              context: context,
+                              builder: (BuildContext bc) {
+                                return Wrap(children: const [
+                                  RequestVisitBottomSheet()
+                                ]);
+                              });
+                        }
+                      },
                       child: const Text(
                         "Request Call Back",
                         style: TextStyle(

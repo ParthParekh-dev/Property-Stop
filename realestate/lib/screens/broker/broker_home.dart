@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-// import 'package:propertystop/screens/loan_form.dart';
-import 'package:propertystop/screens/broker/pages/my_clients.dart';
 // import 'package:propertystop/screens/broker/pages/my_properties.dart';
 import 'package:propertystop/screens/broker/pages/others_page.dart';
 import 'package:propertystop/screens/broker/pages/property_list.dart';
 import 'package:propertystop/screens/broker/pages/rentals.dart';
 import 'package:propertystop/screens/broker/pages/resale.dart';
+import 'package:propertystop/screens/realestate_webview.dart';
 import 'package:propertystop/utils/constants.dart' as constants;
 
 class BrokerHomeScreen extends StatefulWidget {
@@ -21,7 +20,11 @@ class _BrokerHomeScreenState extends State<BrokerHomeScreen> {
   final List<Widget> _children = [
     const BrokerPropertyListPage(),
     const ResalePage(),
-    const BrokerClientsPage(),
+    // const BrokerClientsPage(),
+    const RealEstateWebView(
+      pageUrl: 'https://google.com',
+      title: 'Blogs',
+    ),
     const RentalPage(),
     const BrokerOthersPage(),
   ];
@@ -63,7 +66,7 @@ class _BrokerHomeScreenState extends State<BrokerHomeScreen> {
                 padding: EdgeInsets.all(8.0),
                 child: Icon(Icons.maps_home_work_outlined),
               ),
-              label: 'Primary',
+              label: 'Project',
             ),
             BottomNavigationBarItem(
               icon: Padding(
@@ -75,9 +78,9 @@ class _BrokerHomeScreenState extends State<BrokerHomeScreen> {
             BottomNavigationBarItem(
               icon: Padding(
                 padding: EdgeInsets.all(8.0),
-                child: Icon(Icons.people_alt_outlined),
+                child: Icon(Icons.book_outlined),
               ),
-              label: 'Clients',
+              label: 'Blogs',
             ),
             BottomNavigationBarItem(
               icon: Padding(
