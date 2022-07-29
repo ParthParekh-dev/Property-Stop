@@ -9,15 +9,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../utils/custom_dialog.dart';
 
-class RequestVisitBottomSheet extends StatefulWidget {
-  const RequestVisitBottomSheet({Key? key}) : super(key: key);
+class RequestCallbackBottomSheet extends StatefulWidget {
+  const RequestCallbackBottomSheet({Key? key}) : super(key: key);
 
   @override
-  State<RequestVisitBottomSheet> createState() =>
-      _RequestVisitBottomSheetState();
+  State<RequestCallbackBottomSheet> createState() =>
+      _RequestCallbackBottomSheetState();
 }
 
-class _RequestVisitBottomSheetState extends State<RequestVisitBottomSheet> {
+class _RequestCallbackBottomSheetState
+    extends State<RequestCallbackBottomSheet> {
   DateTime dateTime = DateTime.now();
 
   Dio dio = Dio();
@@ -57,6 +58,7 @@ class _RequestVisitBottomSheetState extends State<RequestVisitBottomSheet> {
                     padding: const EdgeInsets.all(20),
                     // color: Colors.white,
                     child: Form(
+                      autovalidateMode: AutovalidateMode.always,
                       key: _formKey,
                       child: Column(
                         children: [
@@ -174,6 +176,9 @@ class _RequestVisitBottomSheetState extends State<RequestVisitBottomSheet> {
                                     const EdgeInsets.symmetric(vertical: 8),
                                 width: double.infinity,
                                 child: TextFormField(
+                                  validator: (value) {
+                                    return validateEmail(value);
+                                  },
                                   controller: emailAddressInput,
                                   style: const TextStyle(fontSize: 16),
                                   keyboardType: TextInputType.emailAddress,
@@ -402,6 +407,18 @@ class _RequestVisitBottomSheetState extends State<RequestVisitBottomSheet> {
         ),
       ),
     );
+  }
+
+  String? validateEmail(String? value) {
+    String pattern =
+        r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]"
+        r"{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]"
+        r"{0,253}[a-zA-Z0-9])?)*$";
+    RegExp regex = RegExp(pattern);
+    if (value == null || value.isEmpty || !regex.hasMatch(value))
+      return 'Enter a valid email address';
+    else
+      return null;
   }
 
   Future<DateTime?> pickDate() => showDatePicker(

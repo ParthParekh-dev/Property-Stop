@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:gif_view/gif_view.dart';
 import 'package:propertystop/utils/constants.dart' as constants;
 import 'package:propertystop/utils/router.dart' as router;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -27,6 +28,8 @@ class _SplashScreenState extends State<SplashScreen> {
     final resp = await dio.get("http://propertystop.com/");
     final csrf = resp.headers['set-cookie']?[0].split(";")[0].split("=")[1];
 
+    print(csrf);
+    print(resp.headers['set-cookie']);
     bool? isLoggedIn = prefs.getBool(constants.isLoggedIn);
     if (isLoggedIn != null) {
       setState(() {
@@ -63,10 +66,11 @@ class _SplashScreenState extends State<SplashScreen> {
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset(
-                "assets/logo.jpg",
-                height: 200.0,
-                width: 200.0,
+              GifView.asset(
+                'assets/gifs/logo_red.gif',
+                height: 200,
+                width: 200,
+                frameRate: 30, // default is 15 FPS
               ),
               const SizedBox(
                 height: 24,

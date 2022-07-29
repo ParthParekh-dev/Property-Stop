@@ -5,6 +5,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:propertystop/screens/broker/models/property.dart';
 import 'package:propertystop/screens/property_photos.dart';
+import 'package:propertystop/screens/request_callback_bottomsheet.dart';
 import 'package:propertystop/screens/request_visit_bottomsheet.dart';
 import 'package:propertystop/screens/youtube_videos.dart';
 import 'package:propertystop/utils/constants.dart' as constants;
@@ -55,26 +56,32 @@ class _BrokerPropertyDetailPageState extends State<BrokerPropertyDetailPage> {
                       color: Colors.white,
                       padding: const EdgeInsets.symmetric(
                           horizontal: 12, vertical: 12),
-                      child: CarouselSlider(
-                        items: List.generate(
-                          widget.property.images.length,
-                          (index) => ClipRRect(
-                            borderRadius: BorderRadius.circular(5),
-                            child: Image.asset(
-                              widget.property.images[index],
-                              fit: BoxFit.cover,
-                              height: MediaQuery.of(context).size.height *
-                                  0.3, // 35%
-                              width: MediaQuery.of(context).size.width,
-                            ),
-                          ),
-                        ),
-                        options: CarouselOptions(
-                          aspectRatio: 2.0,
-                          autoPlay: true,
-                          enlargeCenterPage: true,
-                          pageSnapping: true,
-                        ),
+                      // child: CarouselSlider(
+                      //   items: List.generate(
+                      //     widget.property.images.length,
+                      //     (index) => ClipRRect(
+                      //       borderRadius: BorderRadius.circular(5),
+                      //       child: Image.asset(
+                      //         widget.property.images[index],
+                      //         fit: BoxFit.cover,
+                      //         height: MediaQuery.of(context).size.height *
+                      //             0.3, // 35%
+                      //         width: MediaQuery.of(context).size.width,
+                      //       ),
+                      //     ),
+                      //   ),
+                      //   options: CarouselOptions(
+                      //     aspectRatio: 2.0,
+                      //     autoPlay: true,
+                      //     enlargeCenterPage: true,
+                      //     pageSnapping: true,
+                      //   ),
+                      // ),
+                      child: Image.asset(
+                        widget.property.images[0],
+                        fit: BoxFit.cover,
+                        height: MediaQuery.of(context).size.height * 0.3, // 35%
+                        width: MediaQuery.of(context).size.width,
                       ),
                     ),
                   ],
@@ -133,60 +140,57 @@ class _BrokerPropertyDetailPageState extends State<BrokerPropertyDetailPage> {
                       ),
                       Row(
                         children: [
+                          const Icon(
+                            Icons.location_on,
+                            color: Colors.black87,
+                            size: 18,
+                          ),
+                          const SizedBox(
+                            width: 5,
+                          ),
                           Expanded(
-                            child: Row(
-                              children: [
-                                const Icon(
-                                  Icons.location_on,
-                                  color: Colors.black87,
-                                  size: 18,
-                                ),
-                                const SizedBox(
-                                  width: 5,
-                                ),
-                                Expanded(
-                                  child: Text(
-                                    widget.property.location,
-                                    style: const TextStyle(
-                                      color: Colors.black87,
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.w500,
-                                      overflow: TextOverflow.clip,
-                                    ),
-                                  ),
-                                ),
-                              ],
+                            child: Text(
+                              widget.property.location,
+                              style: const TextStyle(
+                                color: Colors.black87,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w500,
+                                overflow: TextOverflow.clip,
+                              ),
                             ),
                           ),
-                          OutlinedButton(
-                            style: OutlinedButton.styleFrom(
-                              side: const BorderSide(
-                                  color: Colors.black, width: 1),
-                              padding: const EdgeInsets.all(12.0),
-                            ),
-                            onPressed: () {},
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: const [
-                                Icon(
-                                  Icons.download,
-                                  color: Colors.black,
-                                ),
-                                Text(
-                                  "Download \nBrochure",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    color: Colors.black87,
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.w500,
-                                    overflow: TextOverflow.clip,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          )
                         ],
                       ),
+                      const SizedBox(
+                        height: 12,
+                      ),
+                      OutlinedButton(
+                        style: OutlinedButton.styleFrom(
+                          side: const BorderSide(color: Colors.black, width: 1),
+                          padding: const EdgeInsets.all(12.0),
+                        ),
+                        onPressed: () {},
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: const [
+                            Icon(
+                              Icons.download,
+                              color: Colors.black,
+                            ),
+                            Text(
+                              "Download Brochure",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.black87,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w500,
+                                overflow: TextOverflow.clip,
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
                     ],
                   ),
                 ),
@@ -202,22 +206,29 @@ class _BrokerPropertyDetailPageState extends State<BrokerPropertyDetailPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Expanded(
-                          child: OutlinedButton(
-                            onPressed: () {
+                          child: GestureDetector(
+                            onTap: () {
                               Get.to(() => PropertyPhotos());
                             },
-                            child: const Text(
-                              "Photos",
-                              style: TextStyle(
-                                color: constants.PRIMARY_COLOR,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 12,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 16,
+                                horizontal: 12,
                               ),
-                            ),
-                            style: OutlinedButton.styleFrom(
-                              side: const BorderSide(
-                                  color: constants.PRIMARY_COLOR, width: 1),
-                              padding: const EdgeInsets.all(12.0),
+                              decoration: BoxDecoration(
+                                color: constants.PRIMARY_COLOR,
+                                borderRadius: BorderRadius.circular(50),
+                              ),
+                              child: const Center(
+                                child: Text(
+                                  "Photos",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
                         ),
@@ -225,22 +236,29 @@ class _BrokerPropertyDetailPageState extends State<BrokerPropertyDetailPage> {
                           width: 20,
                         ),
                         Expanded(
-                          child: OutlinedButton(
-                            onPressed: () {
+                          child: GestureDetector(
+                            onTap: () {
                               Get.to(() => VideoList());
                             },
-                            child: const Text(
-                              "Videos",
-                              style: TextStyle(
-                                color: constants.PRIMARY_COLOR,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 12,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 16,
+                                horizontal: 12,
                               ),
-                            ),
-                            style: OutlinedButton.styleFrom(
-                              side: const BorderSide(
-                                  color: constants.PRIMARY_COLOR, width: 1),
-                              padding: const EdgeInsets.all(12.0),
+                              decoration: BoxDecoration(
+                                color: constants.PRIMARY_COLOR,
+                                borderRadius: BorderRadius.circular(50),
+                              ),
+                              child: const Center(
+                                child: Text(
+                                  "Videos",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
                         ),
@@ -917,7 +935,7 @@ class _BrokerPropertyDetailPageState extends State<BrokerPropertyDetailPage> {
                 onPressed: () async {
                   final dialogAction = await Dialogs.yesNoAlertDialog(
                       "Confirmation",
-                      "Are you sure you want to request for in-person site visit?");
+                      "Are you sure you want to request for call back from our team?");
                   if (dialogAction == DialogAction.yes) {
                     // Navigator.of(context).pushNamed(
                     //   router.requestVisit,
@@ -930,7 +948,7 @@ class _BrokerPropertyDetailPageState extends State<BrokerPropertyDetailPage> {
                         context: context,
                         builder: (BuildContext bc) {
                           return Wrap(
-                              children: const [RequestVisitBottomSheet()]);
+                              children: const [RequestCallbackBottomSheet()]);
                         });
                   }
                 },
