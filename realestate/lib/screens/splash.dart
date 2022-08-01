@@ -33,13 +33,13 @@ class _SplashScreenState extends State<SplashScreen> {
     bool? isLoggedIn = prefs.getBool(constants.isLoggedIn);
     if (isLoggedIn != null) {
       setState(() {
-        pageName = isLoggedIn ? router.brokerMain : router.brokerMain;
+        pageName = isLoggedIn ? router.brokerMain : router.introPage;
       });
     } else {
       prefs.setString("csrf", csrf ?? "");
       prefs.setString("csrfCookie", resp.headers['set-cookie']?[0] ?? "");
       setState(() {
-        pageName = router.brokerMain;
+        pageName = router.introPage;
       });
     }
 
