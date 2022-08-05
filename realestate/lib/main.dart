@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:loader_overlay/loader_overlay.dart';
-import 'package:propertystop/utils/router.dart' as router;
 import 'package:propertystop/utils/constants.dart' as constants;
+import 'package:propertystop/utils/router.dart' as router;
 
 void main() {
   runApp(const MyApp());

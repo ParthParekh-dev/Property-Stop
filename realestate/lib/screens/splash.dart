@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:gif_view/gif_view.dart';
 import 'package:propertystop/utils/constants.dart' as constants;
@@ -17,27 +16,15 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   String pageName = router.introPage;
 
-  Dio dio = Dio();
-
   startTime() async {
-    // final tokenReq = await dio.get("http://propertystop.com/");
-    // var csrftoken = tokenReq.headers['set-cookie'];
-    // print(csrftoken);
     final prefs = await SharedPreferences.getInstance();
 
-    final resp = await dio.get("http://propertystop.com/");
-    final csrf = resp.headers['set-cookie']?[0].split(";")[0].split("=")[1];
-
-    print(csrf);
-    print(resp.headers['set-cookie']);
     bool? isLoggedIn = prefs.getBool(constants.isLoggedIn);
     if (isLoggedIn != null) {
       setState(() {
         pageName = isLoggedIn ? router.brokerMain : router.introPage;
       });
     } else {
-      prefs.setString("csrf", csrf ?? "");
-      prefs.setString("csrfCookie", resp.headers['set-cookie']?[0] ?? "");
       setState(() {
         pageName = router.introPage;
       });

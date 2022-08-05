@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:propertystop/models/response/propery_list_response.dart';
 import 'package:propertystop/screens/broker/components/property_card.dart';
 import 'package:propertystop/screens/broker/models/property.dart';
 import 'package:propertystop/utils/constants.dart' as constants;
@@ -75,7 +76,25 @@ class _BrokerPropertiesPageState extends State<BrokerPropertiesPage> {
                       itemBuilder: ((context, index) {
                         Property property = dummy_properties[index];
                         return BrokerPropertyListCard(
-                          property: property,
+                          property: Datum(
+                              id: 14,
+                              projectName: "projectName",
+                              propType: "propType",
+                              propAddress: "propAddress",
+                              propCity: "propCity",
+                              propState: "propState",
+                              propCountry: "propCountry",
+                              buildFloors: 13,
+                              buildWings: 4,
+                              builderName: "builderName",
+                              possesssionDate: "possesssionDate",
+                              buildStatusReady: "buildStatusReady",
+                              uniqueId: "uniqueId",
+                              propImg: "propImg",
+                              propRooms: "propRooms",
+                              downloadCls: "downloadCls",
+                              downloadBrochure: "downloadBrochure",
+                              downloadParameter: "downloadParameter"),
                         );
                       }),
                     ),

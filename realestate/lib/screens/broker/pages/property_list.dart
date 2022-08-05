@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:get/get.dart';
+import 'package:propertystop/controllers/property_list_viewmodel.dart';
+import 'package:propertystop/models/response/propery_list_response.dart';
 import 'package:propertystop/screens/broker/components/property_card.dart';
-import 'package:propertystop/screens/broker/models/property.dart';
 import 'package:propertystop/utils/constants.dart' as constants;
 import 'package:propertystop/utils/location.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -17,6 +19,7 @@ class BrokerPropertyListPage extends StatefulWidget {
 
 class _BrokerPropertyListPageState extends State<BrokerPropertyListPage> {
   String? locality;
+  final controller = PropertyListViewModel();
 
   getLocation() async {
     Placemark? p = await getAddressFromLatLong(null, null);
@@ -39,6 +42,7 @@ class _BrokerPropertyListPageState extends State<BrokerPropertyListPage> {
   void initState() {
     super.initState();
     getAndStoreLocationDetails();
+    controller.getPropertyList();
   }
 
   @override
@@ -175,29 +179,25 @@ class _BrokerPropertyListPageState extends State<BrokerPropertyListPage> {
                   ],
                 ),
               ),
-              Expanded(
-                child: ListView.builder(
-                  padding: const EdgeInsets.symmetric(horizontal: 18),
-                  physics: const BouncingScrollPhysics(),
-                  itemCount: dummy_properties.length,
-                  itemBuilder: ((context, index) {
-                    Property property = dummy_properties[index];
-                    return BrokerPropertyListCard(
-                      property: property,
-                    );
-                  }),
-                ),
-              ),
-              // ListView.builder(
-              //   physics: const BouncingScrollPhysics(),
-              //   itemCount: dummy_properties.length,
-              //   itemBuilder: ((context, index) {
-              //     Property property = dummy_properties[index];
-              //     return BrokerPropertyListCard(
-              //       property: property,
-              //     );
-              //   }),
-              // )
+              Obx(() => Expanded(
+                    child: (controller.isLoading.value)
+                        ? Container(
+                            child: (const CircularProgressIndicator()),
+                            width: 50,
+                            height: 50,
+                          )
+                        : ListView.builder(
+                            padding: const EdgeInsets.symmetric(horizontal: 18),
+                            physics: const BouncingScrollPhysics(),
+                            itemCount: controller.propertyList.value.length,
+                            itemBuilder: ((context, index) {
+                              Datum property = controller.propertyList[index];
+                              return BrokerPropertyListCard(
+                                property: property,
+                              );
+                            }),
+                          ),
+                  )),
             ],
           ),
         ),

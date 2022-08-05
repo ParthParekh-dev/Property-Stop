@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:propertystop/screens/broker/models/property.dart';
+import 'package:propertystop/models/response/propery_list_response.dart';
 import 'package:propertystop/screens/broker/property_details.dart';
-import 'package:propertystop/screens/request_visit_bottomsheet.dart';
+import 'package:propertystop/screens/request_callback_bottomsheet.dart';
 import 'package:propertystop/utils/constants.dart' as constants;
 import 'package:propertystop/utils/custom_dialog.dart';
 
@@ -9,7 +9,7 @@ class BrokerPropertyListCard extends StatelessWidget {
   const BrokerPropertyListCard({Key? key, required this.property})
       : super(key: key);
 
-  final Property property;
+  final Datum property;
 
   @override
   Widget build(BuildContext context) {
@@ -64,8 +64,15 @@ class BrokerPropertyListCard extends StatelessWidget {
                 topLeft: Radius.circular(12),
                 topRight: Radius.circular(12),
               ),
-              child: Image.asset(
-                property.image,
+              child: Image.network(
+                property.propImg,
+                errorBuilder: (BuildContext context, Object exception,
+                    StackTrace? stackTrace) {
+                  return Image.asset('assets/no_image.png',
+                      fit: BoxFit.cover,
+                      height: 180,
+                      width: MediaQuery.of(context).size.width);
+                },
                 fit: BoxFit.cover,
                 height: 180,
                 width: MediaQuery.of(context).size.width,
@@ -82,7 +89,7 @@ class BrokerPropertyListCard extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Text(
-                      property.name,
+                      property.projectName,
                       style: const TextStyle(
                         color: Colors.black,
                         fontSize: 20,
@@ -93,7 +100,7 @@ class BrokerPropertyListCard extends StatelessWidget {
                   ),
                   Expanded(
                     child: Text(
-                      property.configuration,
+                      property.propType,
                       style: const TextStyle(
                         color: Colors.black87,
                         fontSize: 15,
@@ -110,7 +117,9 @@ class BrokerPropertyListCard extends StatelessWidget {
               child: Row(
                 children: [
                   Icon(
-                    property.ready ? Icons.car_rental : Icons.construction,
+                    property.buildStatusReady != ""
+                        ? Icons.car_rental
+                        : Icons.construction,
                     color: Colors.black87,
                     size: 18,
                   ),
@@ -119,7 +128,9 @@ class BrokerPropertyListCard extends StatelessWidget {
                   ),
                   Expanded(
                     child: Text(
-                      property.ready ? 'Ready To Move' : 'Under Construction',
+                      property.buildStatusReady != ""
+                          ? 'Ready To Move'
+                          : 'Under Construction',
                       style: const TextStyle(
                         color: Colors.black87,
                         fontSize: 15,
@@ -145,7 +156,7 @@ class BrokerPropertyListCard extends StatelessWidget {
                   ),
                   Expanded(
                     child: Text(
-                      property.location,
+                      property.propAddress,
                       style: const TextStyle(
                         color: Colors.black87,
                         fontSize: 13,
@@ -172,6 +183,8 @@ class BrokerPropertyListCard extends StatelessWidget {
                           // Navigator.of(context).pushNamed(
                           //   router.requestVisit,
                           // );
+                          print("Here");
+                          print(property.uniqueId);
                           showModalBottomSheet<dynamic>(
                               isScrollControlled: true,
                               shape: RoundedRectangleBorder(
@@ -179,8 +192,10 @@ class BrokerPropertyListCard extends StatelessWidget {
                               backgroundColor: Colors.white,
                               context: context,
                               builder: (BuildContext bc) {
-                                return Wrap(children: const [
-                                  RequestVisitBottomSheet()
+                                return Wrap(children: [
+                                  RequestCallbackBottomSheet(
+                                    propertyId: property.uniqueId,
+                                  )
                                 ]);
                               });
                         }

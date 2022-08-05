@@ -1,16 +1,21 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:propertystop/utils/constants.dart' as constants;
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../utils/custom_dialog.dart';
 
 class RequestCallbackBottomSheet extends StatefulWidget {
-  const RequestCallbackBottomSheet({Key? key}) : super(key: key);
+  const RequestCallbackBottomSheet({Key? key, required this.propertyId})
+      : super(key: key);
+
+  final String propertyId;
 
   @override
   State<RequestCallbackBottomSheet> createState() =>
@@ -307,50 +312,41 @@ class _RequestCallbackBottomSheetState
                             child: ElevatedButton(
                               onPressed: () async {
                                 if (_formKey.currentState!.validate()) {
-                                  final prefs =
-                                      await SharedPreferences.getInstance();
-
-                                  final csrf = prefs.getString("csrf");
-                                  final csrfCookie =
-                                      prefs.getString("csrfCookie");
-                                  final sessionId =
-                                      prefs.getString("sessionId");
-
-                                  print(DateFormat("H:mm:ss").format(dateTime));
-
-                                  FormData formData = FormData.fromMap({
-                                    "btn_siteVisit": "btn_siteVisit",
-                                    "field": "",
-                                    "site_name": fullNameInput.text,
-                                    "site_contact_no": mobileNumberInput.text,
-                                    "site_email": emailAddressInput.text,
-                                    "site_date": DateFormat("dd-MM-yyyy")
-                                        .format(dateTime)
-                                        .toString(),
-                                    "site_time": DateFormat("h:mm:ss")
-                                        .format(dateTime)
-                                        .toString(),
-                                    "prop_id":
-                                        "Up9KI78-bkTb893-WQi364C-9OP2b1d-623RMll-5l7LHQ7-Sv3E98S"
-                                  });
-
-                                  dio.options.headers['X-CSRFToken'] = csrf;
-                                  dio.options.headers['Cookie'] =
-                                      "$csrfCookie;sessionid=$sessionId";
+                                  var formMap = Map<String, dynamic>();
+                                  formMap["btn_requestCallback"] =
+                                      "btn_requestCallback";
+                                  formMap["field"] = "";
+                                  formMap["name"] = fullNameInput.text;
+                                  formMap["contact_no"] =
+                                      mobileNumberInput.text;
+                                  formMap["email"] = emailAddressInput.text;
+                                  formMap["request_prop_id"] =
+                                      widget.propertyId;
 
                                   try {
-                                    final profileReq = await dio.post(
-                                      'http://propertystop.com/site-visit',
-                                      data: formData,
-                                    );
+                                    http.Response profileReq = await http
+                                        .post(
+                                            Uri.parse(
+                                                "https://propertystop.com/request-callback"),
+                                            body: formMap)
+                                        .timeout(const Duration(seconds: 20));
+
                                     context.loaderOverlay.hide();
+
+                                    print(json.encode(profileReq.body));
+                                    print(profileReq.statusCode);
+
                                     if (profileReq.statusCode == 200) {
-                                      if (profileReq.data['success'] == "0") {
+                                      if (json.decode(
+                                              profileReq.body)['success'] ==
+                                          "0") {
                                         await Dialogs.infoDialog(
-                                          profileReq.data['message'],
+                                          json.decode(
+                                              profileReq.body)['message'],
                                         );
                                         return;
                                       } else {
+                                        print(profileReq.statusCode);
                                         Navigator.of(context).pop();
                                         Fluttertoast.showToast(
                                           msg:
@@ -415,10 +411,11 @@ class _RequestCallbackBottomSheetState
         r"{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]"
         r"{0,253}[a-zA-Z0-9])?)*$";
     RegExp regex = RegExp(pattern);
-    if (value == null || value.isEmpty || !regex.hasMatch(value))
+    if (value == null || value.isEmpty || !regex.hasMatch(value)) {
       return 'Enter a valid email address';
-    else
+    } else {
       return null;
+    }
   }
 
   Future<DateTime?> pickDate() => showDatePicker(

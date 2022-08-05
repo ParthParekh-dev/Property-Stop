@@ -1,16 +1,21 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:propertystop/utils/constants.dart' as constants;
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../utils/custom_dialog.dart';
 
 class RequestVisitBottomSheet extends StatefulWidget {
-  const RequestVisitBottomSheet({Key? key}) : super(key: key);
+  const RequestVisitBottomSheet({Key? key, required this.propertyId})
+      : super(key: key);
+
+  final String propertyId;
 
   @override
   State<RequestVisitBottomSheet> createState() =>
@@ -302,47 +307,44 @@ class _RequestVisitBottomSheetState extends State<RequestVisitBottomSheet> {
                             child: ElevatedButton(
                               onPressed: () async {
                                 if (_formKey.currentState!.validate()) {
-                                  final prefs =
-                                      await SharedPreferences.getInstance();
-
-                                  final csrf = prefs.getString("csrf");
-                                  final csrfCookie =
-                                      prefs.getString("csrfCookie");
-                                  final sessionId =
-                                      prefs.getString("sessionId");
-
-                                  print(DateFormat("H:mm:ss").format(dateTime));
-
-                                  FormData formData = FormData.fromMap({
-                                    "btn_siteVisit": "btn_siteVisit",
-                                    "field": "",
-                                    "site_name": fullNameInput.text,
-                                    "site_contact_no": mobileNumberInput.text,
-                                    "site_email": emailAddressInput.text,
-                                    "site_date": DateFormat("dd-MM-yyyy")
+                                  var request = http.MultipartRequest(
+                                      'POST',
+                                      Uri.parse(
+                                          'https://propertystop.com/site-visit'));
+                                  request.fields.addAll({
+                                    'btn_siteVisit': 'btn_siteVisit',
+                                    'field': '',
+                                    'site_name': fullNameInput.text,
+                                    'site_contact_no': mobileNumberInput.text,
+                                    'site_email': emailAddressInput.text,
+                                    'site_date': DateFormat("dd-MM-yyyy")
                                         .format(dateTime)
                                         .toString(),
-                                    "site_time": DateFormat("h:mm:ss")
+                                    'site_time': DateFormat("h:mm:ss")
                                         .format(dateTime)
                                         .toString(),
-                                    "prop_id":
-                                        "Up9KI78-bkTb893-WQi364C-9OP2b1d-623RMll-5l7LHQ7-Sv3E98S"
+                                    'prop_id': widget.propertyId
                                   });
 
-                                  dio.options.headers['X-CSRFToken'] = csrf;
-                                  dio.options.headers['Cookie'] =
-                                      "$csrfCookie;sessionid=$sessionId";
-
                                   try {
-                                    final profileReq = await dio.post(
-                                      'http://propertystop.com/site-visit',
-                                      data: formData,
-                                    );
+                                    http.StreamedResponse streamedResponse =
+                                        await request.send();
+
+                                    final profileReq =
+                                        await http.Response.fromStream(
+                                            streamedResponse);
                                     context.loaderOverlay.hide();
+
+                                    print(json.encode(profileReq.body));
+                                    print(profileReq.statusCode);
+
                                     if (profileReq.statusCode == 200) {
-                                      if (profileReq.data['success'] == "0") {
+                                      if (json.decode(
+                                              profileReq.body)['success'] ==
+                                          "0") {
                                         await Dialogs.infoDialog(
-                                          profileReq.data['message'],
+                                          json.decode(
+                                              profileReq.body)['message'],
                                         );
                                         return;
                                       } else {

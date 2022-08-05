@@ -1,15 +1,17 @@
 // import 'dart:convert';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:loader_overlay/loader_overlay.dart';
+import 'package:propertystop/controllers/register_viewmodel.dart';
+import 'package:propertystop/models/request/register_user_request.dart';
 // import 'package:flutter_svg/svg.dart';
 import 'package:propertystop/utils/constants.dart' as constants;
-import 'package:dio/dio.dart';
 import 'package:propertystop/utils/custom_dialog.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:propertystop/utils/router.dart' as router;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -29,6 +31,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Dio dio = Dio();
 
   bool _passwordVisible = false;
+
+  final controller = RegisterViewModel();
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -356,51 +365,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             }
 
                             context.loaderOverlay.show();
-                            final prefs = await SharedPreferences.getInstance();
-
-                            final csrf = prefs.getString("csrf");
-                            final csrfCookie = prefs.getString("csrfCookie");
-
-                            FormData formData = FormData.fromMap({
-                              "btn_register": "btn_register",
-                              "field": "",
-                              "full_name": fullName,
-                              "contact_number": mobileNumber,
-                              "email": email,
-                              "user_password": pass,
-                              "user_type": "Customer",
-                            });
-
-                            dio.options.headers['X-CSRFToken'] = csrf;
-                            dio.options.headers['Cookie'] = csrfCookie;
-
                             try {
-                              final registerReq = await dio.post(
-                                'http://propertystop.com/register-user',
-                                data: formData,
-                              );
-                              final sessionId = registerReq
-                                  .headers['set-cookie']?[0]
-                                  .split(";")[0]
-                                  .split("=")[1];
-                              prefs.setString("sessionId", sessionId ?? "");
+                              await controller.registerUser(RegisterUserRequest(
+                                  btnRegister: "btnRegister",
+                                  field: "",
+                                  fullName: fullName,
+                                  contactNumber: mobileNumber,
+                                  email: email,
+                                  userPassword: pass,
+                                  userType: "broker"));
                               context.loaderOverlay.hide();
-                              if (registerReq.statusCode == 200) {
-                                if (registerReq.data['success'] == "0") {
-                                  // Fluttertoast.showToast(
-                                  //   msg: registerReq.data['message'],
-                                  //   toastLength: Toast.LENGTH_SHORT,
-                                  //   gravity: ToastGravity.BOTTOM,
-                                  //   timeInSecForIosWeb: 1,
-                                  //   fontSize: 16.0,
-                                  // );
-                                  await Dialogs.infoDialog(
-                                    registerReq.data['message'],
-                                  );
-                                  return;
-                                }
-
-                                // Registration Success
+                              if (!controller.isNewUser.value) {
+                                await Dialogs.infoDialog(
+                                  controller.message.value,
+                                );
+                                return;
+                              }
+                              // Registration Success
+                              else {
                                 Fluttertoast.showToast(
                                   msg: "Successfully Registered!",
                                   toastLength: Toast.LENGTH_SHORT,

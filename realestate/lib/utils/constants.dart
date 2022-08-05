@@ -18,6 +18,7 @@ const String isLoggedIn = "isLoggedIn";
 const String isIntro = "isIntro";
 const String mobileNumber = "mobileNumber";
 const String selectedOption = "selectedOption";
+const String baseUrl = "https://propertystop.com";
 
 // Notification Channel
 const String notificationChannel = "property_stop_notification";
