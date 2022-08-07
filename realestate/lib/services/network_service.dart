@@ -276,8 +276,8 @@ class NetworkService {
     String? mobile = prefs.getString(constants.mobileNumber);
 
     request.fields
-        .addAll({'device': 'Mobile', 'mobile_number': mobile.toString()});
-
+        .addAll({'device': 'Mobile', 'mobile_number': "8082019432"});
+print(request.fields);
     var streamedResponse =
         await request.send().timeout(const Duration(seconds: 20));
 

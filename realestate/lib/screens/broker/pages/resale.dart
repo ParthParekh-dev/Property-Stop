@@ -7,6 +7,8 @@ import 'package:propertystop/screens/broker/models/property.dart';
 import 'package:propertystop/screens/broker/resale_property.dart';
 import 'package:propertystop/utils/constants.dart' as constants;
 
+import '../../../add_property_bottomsheet.dart';
+
 class ResalePage extends StatefulWidget {
   const ResalePage({Key? key}) : super(key: key);
 
@@ -232,7 +234,7 @@ class _ResalePageState extends State<ResalePage>
                         backgroundColor: Colors.white,
                         context: context,
                         builder: (BuildContext bc) {
-                          return Wrap(children: const [ResalePropertyPage()]);
+                          return Wrap(children: const [Addpropertylist()]);
                         });
                   },
                   backgroundColor: constants.PRIMARY_COLOR,
