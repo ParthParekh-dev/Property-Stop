@@ -7,6 +7,8 @@ import 'package:propertystop/screens/broker/pages/resale.dart';
 import 'package:propertystop/screens/realestate_webview.dart';
 import 'package:propertystop/utils/constants.dart' as constants;
 
+import '../../utils/custom_dialog.dart';
+
 class BrokerHomeScreen extends StatefulWidget {
   const BrokerHomeScreen({Key? key}) : super(key: key);
 
@@ -29,77 +31,89 @@ class _BrokerHomeScreenState extends State<BrokerHomeScreen> {
     const BrokerOthersPage(),
   ];
 
+  Future<bool> _onWillPop() async {
+    final dialogAction = await Dialogs.yesNoAlertDialog(
+        "Confirmation", "Are you sure you want to exit the app");
+    if (dialogAction == DialogAction.yes) {
+      Navigator.of(context).pop(true);
+    }
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      bottomNavigationBar: Container(
-        decoration: const BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black45,
-              blurRadius: 5.0,
-              spreadRadius: 3,
-              offset: Offset.zero,
-              blurStyle: BlurStyle.outer,
-            ),
-          ],
+    return WillPopScope(
+      onWillPop: _onWillPop,
+      child: Scaffold(
+        bottomNavigationBar: Container(
+          decoration: const BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black45,
+                blurRadius: 5.0,
+                spreadRadius: 3,
+                offset: Offset.zero,
+                blurStyle: BlurStyle.outer,
+              ),
+            ],
+          ),
+          child: BottomNavigationBar(
+            type: BottomNavigationBarType.fixed,
+            enableFeedback: true,
+            elevation: 15,
+            backgroundColor: Colors.white,
+            showSelectedLabels: true,
+            showUnselectedLabels: true,
+            iconSize: 26,
+            currentIndex: _selectedIndex,
+            selectedItemColor: constants.PRIMARY_COLOR,
+            selectedLabelStyle:
+                const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+            unselectedItemColor: Colors.black,
+            unselectedLabelStyle:
+                const TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
+            onTap: (index) => setState(() => _selectedIndex = index),
+            items: const <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                icon: Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Icon(Icons.maps_home_work_outlined),
+                ),
+                label: 'Project',
+              ),
+              BottomNavigationBarItem(
+                icon: Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Icon(Icons.real_estate_agent_outlined),
+                ),
+                label: 'Resale',
+              ),
+              BottomNavigationBarItem(
+                icon: Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Icon(Icons.book_outlined),
+                ),
+                label: 'Blogs',
+              ),
+              BottomNavigationBarItem(
+                icon: Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Icon(Icons.house_outlined),
+                ),
+                label: 'Rentals',
+              ),
+              BottomNavigationBarItem(
+                icon: Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Icon(Icons.settings_outlined),
+                ),
+                label: 'Accounts',
+              ),
+            ],
+          ),
         ),
-        child: BottomNavigationBar(
-          type: BottomNavigationBarType.fixed,
-          enableFeedback: true,
-          elevation: 15,
-          backgroundColor: Colors.white,
-          showSelectedLabels: true,
-          showUnselectedLabels: true,
-          iconSize: 26,
-          currentIndex: _selectedIndex,
-          selectedItemColor: constants.PRIMARY_COLOR,
-          selectedLabelStyle:
-              const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-          unselectedItemColor: Colors.black,
-          unselectedLabelStyle:
-              const TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
-          onTap: (index) => setState(() => _selectedIndex = index),
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Icon(Icons.maps_home_work_outlined),
-              ),
-              label: 'Project',
-            ),
-            BottomNavigationBarItem(
-              icon: Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Icon(Icons.real_estate_agent_outlined),
-              ),
-              label: 'Resale',
-            ),
-            BottomNavigationBarItem(
-              icon: Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Icon(Icons.book_outlined),
-              ),
-              label: 'Blogs',
-            ),
-            BottomNavigationBarItem(
-              icon: Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Icon(Icons.house_outlined),
-              ),
-              label: 'Rentals',
-            ),
-            BottomNavigationBarItem(
-              icon: Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Icon(Icons.settings_outlined),
-              ),
-              label: 'Accounts',
-            ),
-          ],
-        ),
+        body: _children[_selectedIndex],
       ),
-      body: _children[_selectedIndex],
     );
   }
 }

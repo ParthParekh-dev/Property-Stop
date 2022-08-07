@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:gif_view/gif_view.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:propertystop/utils/constants.dart' as constants;
 import 'package:propertystop/utils/router.dart' as router;
@@ -20,9 +21,12 @@ class MyApp extends StatelessWidget {
       useDefaultLoading: false,
       overlayOpacity: 0.5,
       overlayColor: Colors.black87,
-      overlayWidget: const Center(
-        child: CircularProgressIndicator(
-          color: constants.PRIMARY_COLOR,
+      overlayWidget: Center(
+        child: GifView.asset(
+          'assets/gifs/logo_red.gif',
+          height: 100,
+          width: 100,
+          frameRate: 30, // default is 15 FPS
         ),
       ),
       child: GetMaterialApp(

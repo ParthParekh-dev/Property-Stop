@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:propertystop/utils/router.dart' as router;
+import 'package:get/get.dart';
+import 'package:propertystop/screens/emi_calc.dart';
+import 'package:propertystop/screens/loan_form.dart';
+import 'package:propertystop/screens/profile.dart';
 import 'package:propertystop/utils/constants.dart' as constants;
+import 'package:propertystop/utils/router.dart' as router;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class BrokerOthersPage extends StatefulWidget {
@@ -97,7 +101,8 @@ class _BrokerOthersPageState extends State<BrokerOthersPage> {
                         ),
                         child: GestureDetector(
                           onTap: () {
-                            Navigator.pushNamed(context, router.emiCalcPage);
+                            Get.to(() => const EmiCalcScreen(),
+                                transition: Transition.rightToLeft);
                           },
                           child: Row(
                             children: const [
@@ -128,8 +133,10 @@ class _BrokerOthersPageState extends State<BrokerOthersPage> {
                         ),
                         child: GestureDetector(
                           onTap: () {
-                            Navigator.pushNamed(
-                                context, router.loanApplicationPage);
+                            Get.to(() => const LoanApplicationScreen(),
+                                transition: Transition.rightToLeft);
+                            // Navigator.pushNamed(
+                            //     context, router.loanApplicationPage);
                           },
                           child: Row(
                             children: const [
@@ -237,13 +244,49 @@ class _BrokerOthersPageState extends State<BrokerOthersPage> {
                         ),
                         child: GestureDetector(
                           onTap: () {
-                            Navigator.pushNamed(context, router.profilePage);
+                            // Navigator.pushNamed(context, router.profilePage);
+                            Get.to(() => const ProfilePage(),
+                                transition: Transition.rightToLeft);
                           },
                           child: Row(
                             children: const [
                               Expanded(
                                 child: Text(
-                                  "Update Profile",
+                                  "My Profile",
+                                  style: TextStyle(
+                                    color: Color.fromRGBO(0, 0, 0, 0.5),
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 5, horizontal: 0),
+                      child: Container(
+                        padding: const EdgeInsets.only(bottom: 12),
+                        decoration: const BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(
+                              color: Color.fromRGBO(0, 0, 0, 0.2),
+                            ),
+                          ),
+                        ),
+                        child: GestureDetector(
+                          onTap: () {
+                            // Get.to(() => coonst ProfilePage(),
+                            //     transition: Transition.rightToLeft);
+                          },
+                          child: Row(
+                            children: const [
+                              Expanded(
+                                child: Text(
+                                  "My Site Visits",
                                   style: TextStyle(
                                     color: Color.fromRGBO(0, 0, 0, 0.5),
                                     fontSize: 13,

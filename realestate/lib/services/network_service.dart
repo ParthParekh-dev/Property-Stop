@@ -36,8 +36,11 @@ class NetworkService {
   }
 
   Future<PropertyDetailResponse?> getPropertyDetail(String propertyId) async {
+    final prefs = await SharedPreferences.getInstance();
+    var mobileNumber = prefs.getString(constants.mobileNumber);
+
     var url = Uri.parse(
-        '${constants.baseUrl}/property-details?id=$propertyId&device=Mobile');
+        '${constants.baseUrl}/property-details?id=$propertyId&device=Mobile&user_type=Broker&mobile_number=$mobileNumber');
 
     http.Response response = await http
         .get(
@@ -67,6 +70,7 @@ class NetworkService {
     var url = Uri.parse('${constants.baseUrl}/register-user');
 
     var request = http.MultipartRequest('POST', url);
+    print(registerUserRequest.toJson());
 
     request.fields.addAll(registerUserRequest.toJson());
 
@@ -219,6 +223,41 @@ class NetworkService {
     } else {
       Get.snackbar('Something went wrong,Please try again later',
           'Error #6 ${response.statusCode}',
+          backgroundColor: Colors.white,
+          duration: const Duration(seconds: 2),
+          snackPosition: SnackPosition.BOTTOM);
+      return null;
+    }
+  }
+
+  Future<String?> getUserProfile() async {
+    var url = Uri.parse('${constants.baseUrl}/getUserInfo');
+
+    var request = http.MultipartRequest('POST', url);
+
+    final prefs = await SharedPreferences.getInstance();
+    String? mobile = prefs.getString(constants.mobileNumber);
+
+    print(mobile);
+    print("Partg");
+
+    request.fields
+        .addAll({'device': 'Mobile', 'mobile_number': mobile.toString()});
+
+    var streamedResponse =
+        await request.send().timeout(const Duration(seconds: 20));
+
+    var response = await http.Response.fromStream(streamedResponse);
+
+    debugPrint(url.toString());
+    debugPrint("getUserProfile\n" + response.statusCode.toString());
+    debugPrint("getUserProfile\n" + response.body);
+
+    if (response.statusCode == 200) {
+      return (response.body);
+    } else {
+      Get.snackbar('Something went wrong,Please try again later',
+          'Error #7 ${response.statusCode}',
           backgroundColor: Colors.white,
           duration: const Duration(seconds: 2),
           snackPosition: SnackPosition.BOTTOM);

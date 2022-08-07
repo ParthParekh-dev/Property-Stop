@@ -312,24 +312,33 @@ class _RequestCallbackBottomSheetState
                             child: ElevatedButton(
                               onPressed: () async {
                                 if (_formKey.currentState!.validate()) {
-                                  var formMap = Map<String, dynamic>();
-                                  formMap["btn_requestCallback"] =
-                                      "btn_requestCallback";
-                                  formMap["field"] = "";
-                                  formMap["name"] = fullNameInput.text;
-                                  formMap["contact_no"] =
-                                      mobileNumberInput.text;
-                                  formMap["email"] = emailAddressInput.text;
-                                  formMap["request_prop_id"] =
-                                      widget.propertyId;
+                                  var request = http.MultipartRequest(
+                                      'POST',
+                                      Uri.parse(
+                                          'https://propertystop.com/request-callback'));
+                                  request.fields.addAll({
+                                    'btn_requestCallback':
+                                        'btn_requestCallback',
+                                    'field': '',
+                                    'name': fullNameInput.text,
+                                    'contact_no': mobileNumberInput.text,
+                                    'email': emailAddressInput.text,
+                                    'message': "",
+                                    'request_prop_id': widget.propertyId
+                                  });
 
                                   try {
-                                    http.Response profileReq = await http
-                                        .post(
-                                            Uri.parse(
-                                                "https://propertystop.com/request-callback"),
-                                            body: formMap)
+                                    context.loaderOverlay.show();
+
+                                    var streamedResponse = await request
+                                        .send()
                                         .timeout(const Duration(seconds: 20));
+
+                                    var profileReq =
+                                        await http.Response.fromStream(
+                                            streamedResponse);
+
+                                    print(request.fields);
 
                                     context.loaderOverlay.hide();
 

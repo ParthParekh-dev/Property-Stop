@@ -17,6 +17,7 @@ const String login = "";
 const String isLoggedIn = "isLoggedIn";
 const String isIntro = "isIntro";
 const String mobileNumber = "mobileNumber";
+const String userType = "userType";
 const String selectedOption = "selectedOption";
 const String baseUrl = "https://propertystop.com";
 

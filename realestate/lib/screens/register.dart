@@ -253,8 +253,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         width: double.infinity - 50,
                         child: DropdownButtonFormField<String>(
                           isExpanded: false,
-                          items:
-                          userTypes.map(buildMenuItem).toList(),
+                          items: userTypes.map(buildMenuItem).toList(),
                           onChanged: (value) => setState(() {
                             userType = value;
                           }),
@@ -397,7 +396,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               return;
                             }
 
-
                             context.loaderOverlay.show();
                             try {
                               await controller.registerUser(RegisterUserRequest(
@@ -431,6 +429,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     await SharedPreferences.getInstance();
                                 prefs.setString(
                                     constants.mobileNumber, mobileNumber);
+                                prefs.setString(
+                                    constants.userType, userType.toString());
                                 Navigator.of(context).pushNamed(router.otpPage);
                               }
                             } catch (e) {
@@ -506,6 +506,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       ),
     );
   }
+
   DropdownMenuItem<String> buildMenuItem(String item) {
     return DropdownMenuItem(
       value: item,

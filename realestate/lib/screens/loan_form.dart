@@ -1,15 +1,11 @@
 import 'dart:convert';
 
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:http/http.dart' as http;
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:propertystop/utils/constants.dart' as constants;
-import 'package:shared_preferences/shared_preferences.dart';
-
-import '../utils/custom_dialog.dart';
 
 class LoanApplicationScreen extends StatefulWidget {
   const LoanApplicationScreen({Key? key}) : super(key: key);
@@ -21,9 +17,7 @@ class LoanApplicationScreen extends StatefulWidget {
 class _LoanApplicationScreenState extends State<LoanApplicationScreen> {
   final employmentTypes = ["Self Employed", "Salaried"];
   String? employmentType;
-  bool isloading=true;
-
-  Dio dio = Dio();
+  bool isloading = true;
 
   TextEditingController fullNameInput = TextEditingController();
   TextEditingController emailAddressInput = TextEditingController();
@@ -32,7 +26,9 @@ class _LoanApplicationScreenState extends State<LoanApplicationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var h=MediaQuery.of(context).size.height;
+    print(employmentType);
+    print("Parth");
+    var h = MediaQuery.of(context).size.height;
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -53,20 +49,79 @@ class _LoanApplicationScreenState extends State<LoanApplicationScreen> {
             ),
             body: SingleChildScrollView(
               physics: const BouncingScrollPhysics(),
-              child: Column(
-                children: [
-                  Container(
-                    width: double.infinity,
-                    child: Image.asset("assets/homeloan.jpg",),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 10),
-                    child: SizedBox(
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      child: Image.asset(
+                        "assets/homeloan.jpg",
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10),
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: TextFormField(
+                          controller: fullNameInput,
+                          style: const TextStyle(fontSize: 16),
+                          keyboardType: TextInputType.name,
+                          textInputAction: TextInputAction.next,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide.none,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            filled: true,
+                            fillColor: constants.FIELD_COLOR,
+                            contentPadding: const EdgeInsets.all(12),
+                            hintText: "Full Name",
+                            hintStyle: const TextStyle(
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    SizedBox(
                       width: double.infinity,
                       child: TextFormField(
-                        controller: fullNameInput,
+                        controller: mobileNumberInput,
                         style: const TextStyle(fontSize: 16),
-                        keyboardType: TextInputType.name,
+                        keyboardType: TextInputType.phone,
+                        textInputAction: TextInputAction.next,
+                        inputFormatters: [
+                          LengthLimitingTextInputFormatter(10),
+                          FilteringTextInputFormatter.digitsOnly,
+                        ],
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide.none,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          filled: true,
+                          fillColor: constants.FIELD_COLOR,
+                          contentPadding: const EdgeInsets.all(12),
+                          hintText: "Mobile Number",
+                          hintStyle: const TextStyle(
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    SizedBox(
+                      width: double.infinity,
+                      child: TextFormField(
+                        controller: emailAddressInput,
+                        style: const TextStyle(fontSize: 16),
+                        keyboardType: TextInputType.emailAddress,
                         textInputAction: TextInputAction.next,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(
@@ -76,250 +131,184 @@ class _LoanApplicationScreenState extends State<LoanApplicationScreen> {
                           filled: true,
                           fillColor: constants.FIELD_COLOR,
                           contentPadding: const EdgeInsets.all(12),
-                          hintText: "Full Name",
+                          hintText: "Email Address",
                           hintStyle: const TextStyle(
                             fontSize: 16,
                           ),
                         ),
                       ),
                     ),
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  SizedBox(
-                    width: double.infinity,
-                    child: TextFormField(
-                      controller: mobileNumberInput,
-                      style: const TextStyle(fontSize: 16),
-                      keyboardType: TextInputType.phone,
-                      textInputAction: TextInputAction.next,
-                      inputFormatters: [
-                        LengthLimitingTextInputFormatter(10),
-                        FilteringTextInputFormatter.digitsOnly,
-                      ],
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide.none,
-                          borderRadius: BorderRadius.circular(8),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    SizedBox(
+                      width: double.infinity - 50,
+                      child: DropdownButtonFormField<String>(
+                        isExpanded: false,
+                        items: employmentTypes.map(buildMenuItem).toList(),
+                        onChanged: (value) => setState(() {
+                          employmentType = value;
+                        }),
+                        value: employmentType,
+                        hint: const Text(
+                          "Select Employment Type",
+                          style: TextStyle(
+                            fontSize: 16,
+                          ),
                         ),
-                        filled: true,
-                        fillColor: constants.FIELD_COLOR,
-                        contentPadding: const EdgeInsets.all(12),
-                        hintText: "Mobile Number",
-                        hintStyle: const TextStyle(
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide.none,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          filled: true,
+                          fillColor: constants.FIELD_COLOR,
+                          contentPadding: const EdgeInsets.all(12),
+                        ),
+                        style: const TextStyle(
                           fontSize: 16,
+                          color: Colors.black,
                         ),
                       ),
                     ),
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  SizedBox(
-                    width: double.infinity,
-                    child: TextFormField(
-                      controller: emailAddressInput,
-                      style: const TextStyle(fontSize: 16),
-                      keyboardType: TextInputType.emailAddress,
-                      textInputAction: TextInputAction.next,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide.none,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        filled: true,
-                        fillColor: constants.FIELD_COLOR,
-                        contentPadding: const EdgeInsets.all(12),
-                        hintText: "Email Address",
-                        hintStyle: const TextStyle(
-                          fontSize: 16,
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    SizedBox(
+                      width: double.infinity,
+                      child: TextFormField(
+                        controller: loanUptoInput,
+                        style: const TextStyle(fontSize: 16),
+                        keyboardType: TextInputType.number,
+                        textInputAction: TextInputAction.done,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                        ],
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide.none,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          filled: true,
+                          fillColor: constants.FIELD_COLOR,
+                          contentPadding: const EdgeInsets.all(12),
+                          hintText: "Loan Upto",
+                          hintStyle: const TextStyle(
+                            fontSize: 16,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  SizedBox(
-                    width: double.infinity - 50,
-                    child: DropdownButtonFormField<String>(
-                      isExpanded: false,
-                      items:
-                      employmentTypes.map(buildMenuItem).toList(),
-                      onChanged: (value) => setState(() {
-                        employmentType = value;
-                      }),
-                      value: employmentType,
-                      hint: const Text(
-                        "Select Employment Type",
-                        style: TextStyle(
-                          fontSize: 16,
-                        ),
-                      ),
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide.none,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        filled: true,
-                        fillColor: constants.FIELD_COLOR,
-                        contentPadding: const EdgeInsets.all(12),
-                      ),
-                      style: const TextStyle(
-                        fontSize: 16,
-                        color: Colors.black,
-                      ),
+                    const SizedBox(
+                      height: 25,
                     ),
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  SizedBox(
-                    width: double.infinity,
-                    child: TextFormField(
-                      controller: loanUptoInput,
-                      style: const TextStyle(fontSize: 16),
-                      keyboardType: TextInputType.number,
-                      textInputAction: TextInputAction.done,
-                      inputFormatters: [
-                        FilteringTextInputFormatter.digitsOnly,
-                      ],
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide.none,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        filled: true,
-                        fillColor: constants.FIELD_COLOR,
-                        contentPadding: const EdgeInsets.all(12),
-                        hintText: "Loan Upto",
-                        hintStyle: const TextStyle(
-                          fontSize: 16,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 25,
-                  ),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        if(fullNameInput.value.text!=""&&mobileNumberInput.text!=""&&emailAddressInput.value.text!=""&&employmentType!=""&&loanUptoInput.value.text!="")
-                        {
-                          String pattern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
-                          RegExp regExp = new RegExp(pattern);
-                          if(regExp.hasMatch(mobileNumberInput.text))
-                          {
-                            String pattern =r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          if (fullNameInput.value.text != "" &&
+                              mobileNumberInput.text != "" &&
+                              emailAddressInput.value.text != "" &&
+                              employmentType != null &&
+                              loanUptoInput.value.text != "") {
+                            String pattern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
                             RegExp regExp = new RegExp(pattern);
-                            if(regExp.hasMatch(emailAddressInput.text))
-                            {
-                              context.loaderOverlay.show();
-                              validation();
-                            }
-                            else
-                            {
+                            if (regExp.hasMatch(mobileNumberInput.text)) {
+                              String pattern =
+                                  r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
+                              RegExp regExp = new RegExp(pattern);
+                              if (regExp.hasMatch(emailAddressInput.text)) {
+                                context.loaderOverlay.show();
+                                validation();
+                              } else {
+                                Fluttertoast.showToast(
+                                    msg: "Enter Valid Email",
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.CENTER,
+                                    timeInSecForIosWeb: 1,
+                                    backgroundColor: Colors.red,
+                                    textColor: Colors.white,
+                                    fontSize: 16.0);
+                              }
+                            } else {
                               Fluttertoast.showToast(
-                                  msg: "Enter Valid Email",
+                                  msg: "Enter Valid Phone Number",
                                   toastLength: Toast.LENGTH_SHORT,
                                   gravity: ToastGravity.CENTER,
                                   timeInSecForIosWeb: 1,
                                   backgroundColor: Colors.red,
                                   textColor: Colors.white,
-                                  fontSize: 16.0
-                              );
+                                  fontSize: 16.0);
                             }
-                          }
-                          else
-                          {
+                          } else {
                             Fluttertoast.showToast(
-                                msg: "Enater Valid Phone Number",
+                                msg: "Please fill all the details",
                                 toastLength: Toast.LENGTH_SHORT,
-                                gravity: ToastGravity.CENTER,
+                                gravity: ToastGravity.BOTTOM,
                                 timeInSecForIosWeb: 1,
                                 backgroundColor: Colors.red,
                                 textColor: Colors.white,
-                                fontSize: 16.0
-                            );
+                                fontSize: 16.0);
                           }
-
-                        }
-                        else
-                        {
-                          Fluttertoast.showToast(
-                              msg: "fill credencial",
-                              toastLength: Toast.LENGTH_SHORT,
-                              gravity: ToastGravity.CENTER,
-                              timeInSecForIosWeb: 1,
-                              backgroundColor: Colors.red,
-                              textColor: Colors.white,
-                              fontSize: 16.0
-                          );
-                        }
-
-                      },
-                      child: const Text(
-                        "Submit Application",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15,
+                        },
+                        child: const Text(
+                          "Submit Application",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                          ),
                         ),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        primary: constants.PRIMARY_COLOR,
-                        padding: const EdgeInsets.all(12),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                          side: BorderSide.none,
+                        style: ElevatedButton.styleFrom(
+                          primary: constants.PRIMARY_COLOR,
+                          padding: const EdgeInsets.all(12),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            side: BorderSide.none,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            )
-        ),
+            )),
       ),
     );
   }
 
-  validation()
-  async {
+  validation() async {
     try {
       var url = Uri.parse('${constants.baseUrl}/homeLoan-enquiry');
       var request = http.MultipartRequest('POST', url);
-      request.fields.addAll({"btn_homeLoan": "btn_homeLoan",
+      request.fields.addAll({
+        "btn_homeLoan": "btn_homeLoan",
         "field": "",
         "loan_name": fullNameInput.value.text,
         "loan_contact_no": mobileNumberInput.text,
         "loan_email": emailAddressInput.value.text,
         "loan_employment": employmentType ?? "",
-        "loan_amount": loanUptoInput.value.text,});
+        "loan_amount": loanUptoInput.value.text,
+      });
       print(request.fields);
       var streamedResponse =
-      await request.send().timeout(const Duration(seconds: 20));
+          await request.send().timeout(const Duration(seconds: 20));
 
       var response = await http.Response.fromStream(streamedResponse);
 
       debugPrint(url.toString());
       debugPrint("getPropertyList\n" + response.statusCode.toString());
       debugPrint("getPropertyList\n" + response.body);
-      var jason=jsonDecode(response.body);
+      var jason = jsonDecode(response.body);
       if (response.statusCode == 200) {
         context.loaderOverlay.hide();
-        if(jason["success"]=="1")
-        {
+        if (jason["success"] == "1") {
           showDialog<String>(
             context: context,
             builder: (BuildContext context) => AlertDialog(
               title: const Text('Sucess'),
-              content:  Text(jason["message"].toString()),
+              content: Text(jason["message"].toString()),
               actions: <Widget>[
-
                 TextButton(
                   onPressed: () => Navigator.pop(context, 'OK'),
                   child: const Text('OK'),
@@ -332,16 +321,14 @@ class _LoanApplicationScreenState extends State<LoanApplicationScreen> {
           emailAddressInput.clear();
           loanUptoInput.clear();
           setState(() {
-            employmentType=employmentTypes.first;
+            employmentType = employmentTypes.first;
           });
-        }
-        else
-        {
+        } else {
           showDialog<String>(
             context: context,
             builder: (BuildContext context) => AlertDialog(
               title: const Text('Error'),
-              content:  Text(jason["message"].toString()),
+              content: Text(jason["message"].toString()),
               actions: <Widget>[
                 TextButton(
                   onPressed: () => Navigator.pop(context, 'OK'),
@@ -360,8 +347,7 @@ class _LoanApplicationScreenState extends State<LoanApplicationScreen> {
             timeInSecForIosWeb: 1,
             backgroundColor: Colors.red,
             textColor: Colors.white,
-            fontSize: 16.0
-        );
+            fontSize: 16.0);
         return null;
       }
     } catch (e) {
@@ -378,7 +364,6 @@ class _LoanApplicationScreenState extends State<LoanApplicationScreen> {
       return;
     }
   }
-
 
   DropdownMenuItem<String> buildMenuItem(String item) {
     return DropdownMenuItem(

@@ -400,7 +400,7 @@ class _BrokerPropertyDetailPageState extends State<BrokerPropertyDetailPage> {
                                       ),
                                     ),
                                     Text(
-                                      e,
+                                      e["feature"],
                                       style: const TextStyle(
                                         color: Color.fromRGBO(0, 0, 0, 0.8),
                                         fontSize: 14,

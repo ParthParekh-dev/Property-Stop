@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:gif_view/gif_view.dart';
 import 'package:propertystop/controllers/property_list_viewmodel.dart';
 import 'package:propertystop/models/response/propery_list_response.dart';
 import 'package:propertystop/screens/broker/components/property_card.dart';
@@ -41,7 +42,7 @@ class _BrokerPropertyListPageState extends State<BrokerPropertyListPage> {
   @override
   void initState() {
     super.initState();
-    getAndStoreLocationDetails();
+    // getAndStoreLocationDetails();
     controller.getPropertyList();
   }
 
@@ -181,15 +182,27 @@ class _BrokerPropertyListPageState extends State<BrokerPropertyListPage> {
               ),
               Obx(() => Expanded(
                     child: (controller.isLoading.value)
-                        ? Container(
-                            child: (const CircularProgressIndicator()),
-                            width: 50,
-                            height: 50,
+                        ? Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Center(
+                                child: SizedBox(
+                                  child: GifView.asset(
+                                    'assets/gifs/logo_red.gif',
+                                    height: 50,
+                                    width: 50,
+                                    frameRate: 30, // default is 15 FPS
+                                  ),
+                                  width: 50,
+                                  height: 50,
+                                ),
+                              ),
+                            ],
                           )
                         : ListView.builder(
                             padding: const EdgeInsets.symmetric(horizontal: 18),
                             physics: const BouncingScrollPhysics(),
-                            itemCount: controller.propertyList.value.length,
+                            itemCount: controller.propertyList.length,
                             itemBuilder: ((context, index) {
                               Datum property = controller.propertyList[index];
                               return BrokerPropertyListCard(
