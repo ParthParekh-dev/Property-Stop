@@ -55,7 +55,7 @@ class _BrokerOthersPageState extends State<BrokerOthersPage> {
                 prefs.clear();
                 Navigator.pushNamedAndRemoveUntil(
                   context,
-                  router.loginPage,
+                  router.optionsPage,
                   (route) => false,
                 );
               },

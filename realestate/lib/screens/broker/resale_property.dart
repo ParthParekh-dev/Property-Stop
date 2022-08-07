@@ -6,6 +6,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:form_builder_file_picker/form_builder_file_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 import 'package:propertystop/models/request/add_property_request.dart';
 import 'package:propertystop/services/network_service.dart';
 import 'package:propertystop/utils/constants.dart' as constants;
@@ -126,6 +127,7 @@ class _ResalePropertyPageState extends State<ResalePropertyPage> {
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: () async {
+                        context.loaderOverlay.show();
                         var result = await NetworkService().addPropertyResale(
                             AddPropertyRequest(
                                 addAppResalePropClient:
@@ -138,6 +140,7 @@ class _ResalePropertyPageState extends State<ResalePropertyPage> {
                                 propRooms: "propRooms",
                                 propCarpetArea: "propCarpetArea",
                                 propPrice: "propPrice"));
+                        context.loaderOverlay.hide();
 
                         if (json.decode(result!)['success'] == "0") {
                           await Dialogs.infoDialog(
