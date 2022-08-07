@@ -1,14 +1,14 @@
-import 'package:dio/dio.dart';
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:loader_overlay/loader_overlay.dart';
+import 'package:propertystop/services/network_service.dart';
 // import 'package:flutter_svg/svg.dart';
 import 'package:propertystop/utils/constants.dart' as constants;
 import 'package:propertystop/utils/custom_dialog.dart';
 import 'package:propertystop/utils/router.dart' as router;
-import 'package:shared_preferences/shared_preferences.dart';
-// import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -22,8 +22,6 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController passwordInput = TextEditingController();
 
   bool _passwordVisible = false;
-
-  Dio dio = Dio();
 
   @override
   Widget build(BuildContext context) {
@@ -236,62 +234,32 @@ class _LoginScreenState extends State<LoginScreen> {
                               return;
                             }
                             context.loaderOverlay.show();
-                            // final resp =
-                            //     await dio.get("http://propertystop.com/");
-                            // final csrf = resp.headers['set-cookie']?[0]
-                            //     .split(";")[0]
-                            //     .split("=")[1];
-                            final prefs = await SharedPreferences.getInstance();
-
-                            final csrf = prefs.getString("csrf");
-                            final csrfCookie = prefs.getString("csrfCookie");
-
-                            FormData formData = FormData.fromMap({
-                              "btn_login": "btn_login",
-                              "field_log": "",
-                              "contact_number": mobileNumberInput.text,
-                              "user_password": passwordInput.text,
-                            });
-
-                            dio.options.headers['X-CSRFToken'] = csrf;
-                            dio.options.headers['Cookie'] = csrfCookie;
 
                             try {
-                              final loginReq = await dio.post(
-                                'http://propertystop.com/login-user',
-                                data: formData,
-                              );
+                              final loginReq = await NetworkService().loginUser(
+                                  mobileNumberInput.text, passwordInput.text);
                               context.loaderOverlay.hide();
-                              if (loginReq.statusCode == 200) {
-                                if (loginReq.data['success'] == "0") {
-                                  await Dialogs.infoDialog(
-                                    loginReq.data['message'],
-                                  );
-                                  return;
-                                }
 
-                                final sessionId = loginReq.headers['set-cookie']
-                                        ?[0]
-                                    .split(";")[0]
-                                    .split("=")[1];
-                                prefs.setString("sessionId", sessionId ?? "");
+                              var result = json.decode(loginReq.toString());
 
-                                // Login Success
-                                Fluttertoast.showToast(
-                                  msg: "Successfully Logged In!",
-                                  toastLength: Toast.LENGTH_SHORT,
-                                  gravity: ToastGravity.BOTTOM,
-                                  timeInSecForIosWeb: 1,
-                                  fontSize: 16.0,
+                              if (result['success'] == "0") {
+                                await Dialogs.infoDialog(
+                                  result['message'],
                                 );
-                                // final prefs =
-                                //     await SharedPreferences.getInstance();
-                                // prefs.setString(
-                                //     constants.mobileNumber, mobileNumber);
-                                // Navigator.of(context).pushNamed(router.otpPage);
-                                Navigator.of(context).pushNamedAndRemoveUntil(
-                                    router.brokerMain, (route) => false);
+                                return;
                               }
+
+                              // Login Success
+                              Fluttertoast.showToast(
+                                msg: "Successfully Logged In!",
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.BOTTOM,
+                                timeInSecForIosWeb: 1,
+                                fontSize: 16.0,
+                              );
+
+                              Navigator.of(context).pushNamedAndRemoveUntil(
+                                  router.brokerMain, (route) => false);
                             } catch (e) {
                               // ignore: avoid_print
                               print(e);

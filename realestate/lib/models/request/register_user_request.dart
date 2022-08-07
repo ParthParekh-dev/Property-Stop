@@ -19,6 +19,9 @@ class RegisterUserRequest {
     required this.email,
     required this.userPassword,
     required this.userType,
+    required this.firmName,
+    required this.location,
+    required this.device,
   });
 
   String btnRegister;
@@ -28,6 +31,9 @@ class RegisterUserRequest {
   String email;
   String userPassword;
   String userType;
+  String firmName;
+  String location;
+  String device;
 
   factory RegisterUserRequest.fromJson(Map<String, dynamic> json) =>
       RegisterUserRequest(
@@ -38,6 +44,9 @@ class RegisterUserRequest {
         email: json["email"],
         userPassword: json["user_password"],
         userType: json["user_type"],
+        firmName: json["firm_name"],
+        location: json["location"],
+        device: json["device"],
       );
 
   Map<String, String> toJson() => {
@@ -48,5 +57,8 @@ class RegisterUserRequest {
         "email": email,
         "user_password": userPassword,
         "user_type": userType,
+        "firm_name": firmName,
+        "location": location,
+        "device": device,
       };
 }

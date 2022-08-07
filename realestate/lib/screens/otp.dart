@@ -1,8 +1,10 @@
-import 'package:dio/dio.dart';
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:loader_overlay/loader_overlay.dart';
+import 'package:propertystop/services/network_service.dart';
 // import 'package:flutter_svg/svg.dart';
 import 'package:propertystop/utils/constants.dart' as constants;
 import 'package:propertystop/utils/custom_dialog.dart';
@@ -34,12 +36,6 @@ class _OtpScreenState extends State<OtpScreen> {
         mobileNumber = number;
       });
     }
-    // listen for otp
-    // String code = "1234";
-    // otpInput1.text = code.substring(0, 1);
-    // otpInput2.text = code.substring(1, 2);
-    // otpInput3.text = code.substring(2, 3);
-    // otpInput4.text = code.substring(3, 4);
   }
 
   @override
@@ -47,8 +43,6 @@ class _OtpScreenState extends State<OtpScreen> {
     init();
     super.initState();
   }
-
-  Dio dio = Dio();
 
   @override
   Widget build(BuildContext context) {
@@ -373,51 +367,37 @@ class _OtpScreenState extends State<OtpScreen> {
                             }
                             // print("OTP Code is : ${}");
                             context.loaderOverlay.show();
-                            final prefs = await SharedPreferences.getInstance();
 
-                            final csrf = prefs.getString("csrf");
-                            final sessionId = prefs.getString("sessionId");
-                            final csrfCookie = prefs.getString("csrfCookie");
-
-                            FormData formData = FormData.fromMap({
-                              "btn_otp": "btn_otp",
-                              "field_otp": "",
-                              "otp_code":
-                                  "${otpInput1.text}${otpInput2.text}${otpInput3.text}${otpInput4.text}${otpInput5.text}${otpInput6.text}",
-                            });
-
-                            dio.options.headers['X-CSRFToken'] = csrf;
-                            dio.options.headers['Cookie'] =
-                                "$csrfCookie;sessionid=$sessionId";
+                            String finalOtp =
+                                "${otpInput1.text}${otpInput2.text}${otpInput3.text}${otpInput4.text}${otpInput5.text}${otpInput6.text}";
 
                             try {
-                              final verifyOtpReq = await dio.post(
-                                'http://propertystop.com/verify-otp',
-                                data: formData,
-                              );
+                              var verifyOtpReq = await NetworkService()
+                                  .verifyOtp(finalOtp, mobileNumber);
                               context.loaderOverlay.hide();
-                              if (verifyOtpReq.statusCode == 200) {
-                                if (verifyOtpReq.data['success'] == "0") {
-                                  await Dialogs.infoDialog(
-                                    verifyOtpReq.data['message'],
-                                  );
-                                  return;
-                                }
 
-                                // Registration Success
-                                Fluttertoast.showToast(
-                                  msg: "Successfully Verified!",
-                                  toastLength: Toast.LENGTH_SHORT,
-                                  gravity: ToastGravity.BOTTOM,
-                                  timeInSecForIosWeb: 1,
-                                  fontSize: 16.0,
+                              var result = json.decode(verifyOtpReq!);
+
+                              if (result['success'] == "0") {
+                                await Dialogs.infoDialog(
+                                  result['message'],
                                 );
-                                final prefs =
-                                    await SharedPreferences.getInstance();
-                                prefs.setBool(constants.isLoggedIn, true);
-                                Navigator.of(context).pushNamedAndRemoveUntil(
-                                    router.brokerMain, (route) => false);
+                                return;
                               }
+
+                              // Registration Success
+                              Fluttertoast.showToast(
+                                msg: "Successfully Verified!",
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.BOTTOM,
+                                timeInSecForIosWeb: 1,
+                                fontSize: 16.0,
+                              );
+                              final prefs =
+                                  await SharedPreferences.getInstance();
+                              prefs.setBool(constants.isLoggedIn, true);
+                              Navigator.of(context).pushNamedAndRemoveUntil(
+                                  router.brokerMain, (route) => false);
                             } catch (e) {
                               // ignore: avoid_print
                               context.loaderOverlay.hide();
@@ -456,7 +436,27 @@ class _OtpScreenState extends State<OtpScreen> {
                       SizedBox(
                         width: double.infinity,
                         child: OutlinedButton(
-                          onPressed: () {},
+                          onPressed: () async {
+                            var result = await NetworkService().resendOtp();
+                            if (json.decode(result.toString())["success"] ==
+                                "1") {
+                              Fluttertoast.showToast(
+                                msg: "OTP sent!",
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.BOTTOM,
+                                timeInSecForIosWeb: 1,
+                                fontSize: 16.0,
+                              );
+                            } else {
+                              Fluttertoast.showToast(
+                                msg: "Something went wrong!",
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.BOTTOM,
+                                timeInSecForIosWeb: 1,
+                                fontSize: 16.0,
+                              );
+                            }
+                          },
                           child: const Text(
                             "Didn't Receive OTP ?",
                             style: TextStyle(
@@ -472,41 +472,6 @@ class _OtpScreenState extends State<OtpScreen> {
                           ),
                         ),
                       ),
-                      // Container(
-                      //   alignment: Alignment.center,
-                      //   child: Row(
-                      //     mainAxisAlignment: MainAxisAlignment.center,
-                      //     children: [
-                      //       const Text(
-                      //         "Didn't receive OTP ?",
-                      //         textAlign: TextAlign.center,
-                      //         style: TextStyle(
-                      //           color: Colors.black,
-                      //           fontSize: 16,
-                      //           fontWeight: FontWeight.normal,
-                      //         ),
-                      //       ),
-                      //       const SizedBox(
-                      //         width: 2,
-                      //       ),
-                      //       TextButton(
-                      //         onPressed: () {},
-                      //         style: TextButton.styleFrom(
-                      //           splashFactory: NoSplash.splashFactory,
-                      //         ),
-                      //         child: const Text(
-                      //           "Resend",
-                      //           textAlign: TextAlign.center,
-                      //           style: TextStyle(
-                      //             color: constants.PRIMARY_COLOR,
-                      //             fontSize: 16,
-                      //             fontWeight: FontWeight.normal,
-                      //           ),
-                      //         ),
-                      //       ),
-                      //     ],
-                      //   ),
-                      // ),
                     ],
                   ),
                 ),

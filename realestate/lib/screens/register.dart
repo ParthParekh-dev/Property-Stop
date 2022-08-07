@@ -1,13 +1,11 @@
 // import 'dart:convert';
 
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:propertystop/controllers/register_viewmodel.dart';
 import 'package:propertystop/models/request/register_user_request.dart';
-// import 'package:flutter_svg/svg.dart';
 import 'package:propertystop/utils/constants.dart' as constants;
 import 'package:propertystop/utils/custom_dialog.dart';
 import 'package:propertystop/utils/router.dart' as router;
@@ -27,8 +25,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   TextEditingController locationInput = TextEditingController();
   TextEditingController emailInput = TextEditingController();
   TextEditingController passwordInput = TextEditingController();
-
-  Dio dio = Dio();
 
   bool _passwordVisible = false;
 
@@ -373,7 +369,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   contactNumber: mobileNumber,
                                   email: email,
                                   userPassword: pass,
-                                  userType: "broker"));
+                                  userType: "Broker",
+                                  device: "Mobile",
+                                  firmName: firmName,
+                                  location: location));
                               context.loaderOverlay.hide();
                               if (!controller.isNewUser.value) {
                                 await Dialogs.infoDialog(

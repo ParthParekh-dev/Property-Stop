@@ -5,6 +5,7 @@ import 'package:propertystop/models/request/register_user_request.dart';
 import 'package:propertystop/models/response/property_detail_response.dart';
 import 'package:propertystop/models/response/propery_list_response.dart';
 import 'package:propertystop/utils/constants.dart' as constants;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class NetworkService {
   Future<PropertyListResponse?> getPropertyList() async {
@@ -90,13 +91,18 @@ class NetworkService {
     }
   }
 
-  Future<String?> verifyOtp(String otp) async {
+  Future<String?> verifyOtp(String otp, String mobileNumber) async {
     var url = Uri.parse('${constants.baseUrl}/verify-otp');
 
     var request = http.MultipartRequest('POST', url);
 
-    request.fields
-        .addAll({'btn_otp': 'btn_otp', 'field_otp': '', 'otp_code': otp});
+    request.fields.addAll({
+      'btn_otp': 'btn_otp',
+      'field_otp': '',
+      'otp_code': otp,
+      'device': 'Mobile',
+      'mobile_number': mobileNumber
+    });
 
     var streamedResponse =
         await request.send().timeout(const Duration(seconds: 20));
@@ -124,7 +130,14 @@ class NetworkService {
 
     var request = http.MultipartRequest('POST', url);
 
-    request.fields.addAll({'resend_otp': 'resend_otp'});
+    final prefs = await SharedPreferences.getInstance();
+    String? mobile = prefs.getString(constants.mobileNumber);
+
+    request.fields.addAll({
+      'resend_otp': 'resend_otp',
+      'device': 'Mobile',
+      'mobile_number': mobile.toString()
+    });
 
     var streamedResponse =
         await request.send().timeout(const Duration(seconds: 20));
@@ -147,7 +160,7 @@ class NetworkService {
     }
   }
 
-  Future<String?> loginUser() async {
+  Future<String?> loginUser(String mobile, String password) async {
     var url = Uri.parse('${constants.baseUrl}/login-user');
 
     var request = http.MultipartRequest('POST', url);
@@ -155,8 +168,9 @@ class NetworkService {
     request.fields.addAll({
       'btn_login': 'btn_login',
       'field_log': '',
-      'contact_number': '8082019432',
-      'user_password': 'shalini'
+      'contact_number': mobile,
+      'user_password': password,
+      'device': 'Mobile'
     });
 
     var streamedResponse =
