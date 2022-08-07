@@ -20,13 +20,15 @@ class _SplashScreenState extends State<SplashScreen> {
     final prefs = await SharedPreferences.getInstance();
 
     bool? isLoggedIn = prefs.getBool(constants.isLoggedIn);
+    String? intro = prefs.getString(constants.isIntro);
+
     if (isLoggedIn != null) {
       setState(() {
         pageName = isLoggedIn ? router.brokerMain : router.introPage;
       });
     } else {
       setState(() {
-        pageName = router.introPage;
+        pageName = intro!="1"?router.introPage:router.optionsPage;
       });
     }
 

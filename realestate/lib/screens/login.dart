@@ -1,14 +1,16 @@
-import 'dart:convert';
-
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:loader_overlay/loader_overlay.dart';
-import 'package:propertystop/services/network_service.dart';
 // import 'package:flutter_svg/svg.dart';
 import 'package:propertystop/utils/constants.dart' as constants;
 import 'package:propertystop/utils/custom_dialog.dart';
 import 'package:propertystop/utils/router.dart' as router;
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../utils/constants.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -20,8 +22,10 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   TextEditingController mobileNumberInput = TextEditingController();
   TextEditingController passwordInput = TextEditingController();
-
+  late SharedPreferences prefs ;
   bool _passwordVisible = false;
+
+  Dio dio = Dio();
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +48,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 physics: const PageScrollPhysics(),
                 child: Padding(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+                  const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -204,7 +208,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: ElevatedButton(
                           onPressed: () async {
                             String mobileNumber =
-                                mobileNumberInput.text.toString();
+                            mobileNumberInput.text.toString();
                             if (mobileNumber.isEmpty) {
                               Fluttertoast.showToast(
                                 msg: "Please enter mobile number!",
@@ -234,32 +238,62 @@ class _LoginScreenState extends State<LoginScreen> {
                               return;
                             }
                             context.loaderOverlay.show();
+                            // final resp =
+                            //     await dio.get("http://propertystop.com/");
+                            // final csrf = resp.headers['set-cookie']?[0]
+                            //     .split(";")[0]
+                            //     .split("=")[1];
+                            var prefs = await SharedPreferences.getInstance();
+                            FormData formData = FormData.fromMap({
+                              "btn_login": "btn_login",
+                              "field_log": "",
+                              "contact_number": mobileNumberInput.text,
+                              "user_password": passwordInput.text,
+                              "device":"Mobile"
+                            });
 
+                            print(formData.fields);
                             try {
-                              final loginReq = await NetworkService().loginUser(
-                                  mobileNumberInput.text, passwordInput.text);
-                              context.loaderOverlay.hide();
-
-                              var result = json.decode(loginReq.toString());
-
-                              if (result['success'] == "0") {
-                                await Dialogs.infoDialog(
-                                  result['message'],
-                                );
-                                return;
-                              }
-
-                              // Login Success
-                              Fluttertoast.showToast(
-                                msg: "Successfully Logged In!",
-                                toastLength: Toast.LENGTH_SHORT,
-                                gravity: ToastGravity.BOTTOM,
-                                timeInSecForIosWeb: 1,
-                                fontSize: 16.0,
+                              final loginReq = await dio.post(
+                                'https://propertystop.com/login-user',
+                                data: formData,
                               );
+                              context.loaderOverlay.hide();
+                              if (loginReq.statusCode == 200) {
+                                if (loginReq.data['success'] == "0") {
+                                  await Dialogs.infoDialog(
+                                    loginReq.data['message'],
+                                  );
+                                  return;
+                                }
+                                if (loginReq.data['success'] == "1")
+                                {
+                                  prefs = await SharedPreferences.getInstance();
+                                  prefs.setBool(isLoggedIn, true);
+                                }
 
-                              Navigator.of(context).pushNamedAndRemoveUntil(
-                                  router.brokerMain, (route) => false);
+                                final sessionId = loginReq.headers['set-cookie']
+                                ?[0]
+                                    .split(";")[0]
+                                    .split("=")[1];
+                                prefs.setString("sessionId", sessionId ?? "");
+
+                                // Login Success
+                                Fluttertoast.showToast(
+                                  msg: "Successfully Logged In!",
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.BOTTOM,
+                                  timeInSecForIosWeb: 1,
+                                  fontSize: 16.0,
+                                );
+                                // final prefs =
+                                //     await SharedPreferences.getInstance();
+                                // prefs.setString(
+                                //     constants.mobileNumber, mobileNumber);
+                                // Navigator.of(context).pushNamed(router.otpPage);
+                                Navigator.of(context).pushNamedAndRemoveUntil(
+                                    router.brokerMain, (route) => false);
+                              }
                             } catch (e) {
                               // ignore: avoid_print
                               print(e);

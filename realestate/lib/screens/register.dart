@@ -19,6 +19,8 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
+  final userTypes = ["Broker", "Customer"];
+  String? userType;
   TextEditingController mobileNumberInput = TextEditingController();
   TextEditingController fullNameInput = TextEditingController();
   TextEditingController firmNameInput = TextEditingController();
@@ -248,6 +250,41 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         height: 15,
                       ),
                       SizedBox(
+                        width: double.infinity - 50,
+                        child: DropdownButtonFormField<String>(
+                          isExpanded: false,
+                          items:
+                          userTypes.map(buildMenuItem).toList(),
+                          onChanged: (value) => setState(() {
+                            userType = value;
+                          }),
+                          value: userType,
+                          hint: const Text(
+                            "Select User Type",
+                            style: TextStyle(
+                              fontSize: 16,
+                            ),
+                          ),
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide.none,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            filled: true,
+                            fillColor: constants.FIELD_COLOR,
+                            contentPadding: const EdgeInsets.all(12),
+                          ),
+                          style: const TextStyle(
+                            fontSize: 16,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      SizedBox(
                         width: double.infinity,
                         child: TextFormField(
                           controller: firmNameInput,
@@ -360,6 +397,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               return;
                             }
 
+
                             context.loaderOverlay.show();
                             try {
                               await controller.registerUser(RegisterUserRequest(
@@ -369,7 +407,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   contactNumber: mobileNumber,
                                   email: email,
                                   userPassword: pass,
-                                  userType: "Broker",
+                                  userType: userType.toString(),
                                   device: "Mobile",
                                   firmName: firmName,
                                   location: location));
@@ -464,6 +502,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
             ),
           ),
+        ),
+      ),
+    );
+  }
+  DropdownMenuItem<String> buildMenuItem(String item) {
+    return DropdownMenuItem(
+      value: item,
+      child: Text(
+        item,
+        style: const TextStyle(
+          fontSize: 16,
         ),
       ),
     );

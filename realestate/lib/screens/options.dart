@@ -60,7 +60,7 @@ class _OptionsScreenState extends State<OptionsScreen> {
                 Expanded(
                   child: GridView.count(
                     padding:
-                        const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+                    const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
                     crossAxisCount: 2,
                     mainAxisSpacing: 20,
                     crossAxisSpacing: 20,
@@ -111,23 +111,23 @@ class _OptionsScreenState extends State<OptionsScreen> {
                                 ],
                               ),
                               selectedOption != null &&
-                                      selectedOption == "broker"
+                                  selectedOption == "broker"
                                   ? Positioned(
-                                      top: 0,
-                                      right: 0,
-                                      child: Container(
-                                        padding: const EdgeInsets.all(4),
-                                        decoration: const BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            color: constants.PRIMARY_COLOR),
-                                        alignment: Alignment.center,
-                                        child: const Icon(
-                                          Icons.check,
-                                          size: 15,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    )
+                                top: 0,
+                                right: 0,
+                                child: Container(
+                                  padding: const EdgeInsets.all(4),
+                                  decoration: const BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: constants.PRIMARY_COLOR),
+                                  alignment: Alignment.center,
+                                  child: const Icon(
+                                    Icons.check,
+                                    size: 15,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              )
                                   : const SizedBox.shrink()
                             ],
                           ),
@@ -179,23 +179,23 @@ class _OptionsScreenState extends State<OptionsScreen> {
                                 ],
                               ),
                               selectedOption != null &&
-                                      selectedOption == "buy_sell"
+                                  selectedOption == "buy_sell"
                                   ? Positioned(
-                                      top: 0,
-                                      right: 0,
-                                      child: Container(
-                                        padding: const EdgeInsets.all(4),
-                                        decoration: const BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            color: constants.PRIMARY_COLOR),
-                                        alignment: Alignment.center,
-                                        child: const Icon(
-                                          Icons.check,
-                                          size: 15,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    )
+                                top: 0,
+                                right: 0,
+                                child: Container(
+                                  padding: const EdgeInsets.all(4),
+                                  decoration: const BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: constants.PRIMARY_COLOR),
+                                  alignment: Alignment.center,
+                                  child: const Icon(
+                                    Icons.check,
+                                    size: 15,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              )
                                   : const SizedBox.shrink()
                             ],
                           ),
@@ -247,23 +247,23 @@ class _OptionsScreenState extends State<OptionsScreen> {
                                 ],
                               ),
                               selectedOption != null &&
-                                      selectedOption == "emi_calculator"
+                                  selectedOption == "emi_calculator"
                                   ? Positioned(
-                                      top: 0,
-                                      right: 0,
-                                      child: Container(
-                                        padding: const EdgeInsets.all(4),
-                                        decoration: const BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            color: constants.PRIMARY_COLOR),
-                                        alignment: Alignment.center,
-                                        child: const Icon(
-                                          Icons.check,
-                                          size: 15,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    )
+                                top: 0,
+                                right: 0,
+                                child: Container(
+                                  padding: const EdgeInsets.all(4),
+                                  decoration: const BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: constants.PRIMARY_COLOR),
+                                  alignment: Alignment.center,
+                                  child: const Icon(
+                                    Icons.check,
+                                    size: 15,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              )
                                   : const SizedBox.shrink()
                             ],
                           ),
@@ -315,23 +315,23 @@ class _OptionsScreenState extends State<OptionsScreen> {
                                 ],
                               ),
                               selectedOption != null &&
-                                      selectedOption == "loan_application"
+                                  selectedOption == "loan_application"
                                   ? Positioned(
-                                      top: 0,
-                                      right: 0,
-                                      child: Container(
-                                        padding: const EdgeInsets.all(4),
-                                        decoration: const BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            color: constants.PRIMARY_COLOR),
-                                        alignment: Alignment.center,
-                                        child: const Icon(
-                                          Icons.check,
-                                          size: 15,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    )
+                                top: 0,
+                                right: 0,
+                                child: Container(
+                                  padding: const EdgeInsets.all(4),
+                                  decoration: const BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: constants.PRIMARY_COLOR),
+                                  alignment: Alignment.center,
+                                  child: const Icon(
+                                    Icons.check,
+                                    size: 15,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              )
                                   : const SizedBox.shrink()
                             ],
                           ),
@@ -383,23 +383,23 @@ class _OptionsScreenState extends State<OptionsScreen> {
                                 ],
                               ),
                               selectedOption != null &&
-                                      selectedOption == "primary_new"
+                                  selectedOption == "primary_new"
                                   ? Positioned(
-                                      top: 0,
-                                      right: 0,
-                                      child: Container(
-                                        padding: const EdgeInsets.all(4),
-                                        decoration: const BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            color: constants.PRIMARY_COLOR),
-                                        alignment: Alignment.center,
-                                        child: const Icon(
-                                          Icons.check,
-                                          size: 15,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    )
+                                top: 0,
+                                right: 0,
+                                child: Container(
+                                  padding: const EdgeInsets.all(4),
+                                  decoration: const BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: constants.PRIMARY_COLOR),
+                                  alignment: Alignment.center,
+                                  child: const Icon(
+                                    Icons.check,
+                                    size: 15,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              )
                                   : const SizedBox.shrink()
                             ],
                           ),
@@ -432,12 +432,12 @@ class _OptionsScreenState extends State<OptionsScreen> {
                         //     router.brokerMain, (route) => false);
                         return;
                       } else if (selectedOption == "emi_calculator") {
-                        // Navigator.of(context).pushNamedAndRemoveUntil(
-                        //     router.brokerMain, (route) => false);
+                        Navigator.of(context).pushNamedAndRemoveUntil(
+                            router.emiCalcPage, (route) => false);
                         return;
                       } else if (selectedOption == "loan_application") {
-                        // Navigator.of(context).pushNamedAndRemoveUntil(
-                        //     router.brokerMain, (route) => false);
+                        Navigator.of(context).pushNamedAndRemoveUntil(
+                            router.loanApplicationPage, (route) => false);
                         return;
                       } else if (selectedOption == "primary_new") {
                         final prefs = await SharedPreferences.getInstance();
