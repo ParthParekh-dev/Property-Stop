@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:propertystop/screens/emi_calc.dart';
 import 'package:propertystop/screens/loan_form.dart';
+import 'package:propertystop/screens/my_site_visits.dart';
 import 'package:propertystop/screens/profile.dart';
 import 'package:propertystop/utils/constants.dart' as constants;
 import 'package:propertystop/utils/router.dart' as router;
@@ -279,8 +280,8 @@ class _BrokerOthersPageState extends State<BrokerOthersPage> {
                         ),
                         child: GestureDetector(
                           onTap: () {
-                            // Get.to(() => coonst ProfilePage(),
-                            //     transition: Transition.rightToLeft);
+                            Get.to(() => MySiteVisits(),
+                                transition: Transition.rightToLeft);
                           },
                           child: Row(
                             children: const [

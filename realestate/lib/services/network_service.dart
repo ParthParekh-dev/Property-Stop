@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:propertystop/models/request/register_user_request.dart';
 import 'package:propertystop/models/response/property_detail_response.dart';
 import 'package:propertystop/models/response/propery_list_response.dart';
+import 'package:propertystop/models/response/site_visit_response.dart';
 import 'package:propertystop/utils/constants.dart' as constants;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -258,6 +259,38 @@ class NetworkService {
     } else {
       Get.snackbar('Something went wrong,Please try again later',
           'Error #7 ${response.statusCode}',
+          backgroundColor: Colors.white,
+          duration: const Duration(seconds: 2),
+          snackPosition: SnackPosition.BOTTOM);
+      return null;
+    }
+  }
+
+  Future<List<SiteVisitResponse>?> getAllSiteVisit() async {
+    var url = Uri.parse('${constants.baseUrl}/showMySiteVisits');
+
+    var request = http.MultipartRequest('POST', url);
+
+    final prefs = await SharedPreferences.getInstance();
+    String? mobile = prefs.getString(constants.mobileNumber);
+
+    request.fields
+        .addAll({'device': 'Mobile', 'mobile_number': mobile.toString()});
+
+    var streamedResponse =
+        await request.send().timeout(const Duration(seconds: 20));
+
+    var response = await http.Response.fromStream(streamedResponse);
+
+    debugPrint(url.toString());
+    debugPrint("getAllSiteVisit\n" + response.statusCode.toString());
+    debugPrint("getAllSiteVisit\n" + response.body);
+
+    if (response.statusCode == 200) {
+      return (siteVisitResponseFromJson(response.body));
+    } else {
+      Get.snackbar('Something went wrong,Please try again later',
+          'Error #8 ${response.statusCode}',
           backgroundColor: Colors.white,
           duration: const Duration(seconds: 2),
           snackPosition: SnackPosition.BOTTOM);

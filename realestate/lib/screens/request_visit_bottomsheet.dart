@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:propertystop/utils/constants.dart' as constants;
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../utils/custom_dialog.dart';
 
@@ -307,6 +308,10 @@ class _RequestVisitBottomSheetState extends State<RequestVisitBottomSheet> {
                             child: ElevatedButton(
                               onPressed: () async {
                                 if (_formKey.currentState!.validate()) {
+                                  final prefs =
+                                      await SharedPreferences.getInstance();
+                                  String? loggedInMobile =
+                                      prefs.getString(constants.mobileNumber);
                                   var request = http.MultipartRequest(
                                       'POST',
                                       Uri.parse(
@@ -323,8 +328,12 @@ class _RequestVisitBottomSheetState extends State<RequestVisitBottomSheet> {
                                     'site_time': DateFormat("h:mm:ss")
                                         .format(dateTime)
                                         .toString(),
-                                    'prop_id': widget.propertyId
+                                    'prop_id': widget.propertyId,
+                                    'device': "Mobile",
+                                    'mobile_number': loggedInMobile.toString()
                                   });
+
+                                  print(request.fields);
 
                                   try {
                                     http.StreamedResponse streamedResponse =
