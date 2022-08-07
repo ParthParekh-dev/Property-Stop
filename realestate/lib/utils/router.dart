@@ -16,6 +16,8 @@ import 'package:propertystop/screens/register.dart';
 import 'package:propertystop/screens/request_visit.dart';
 import 'package:propertystop/screens/splash.dart';
 
+import '../add_property_bottomsheet.dart';
+
 // Define Routes
 
 // Route Names
@@ -36,6 +38,7 @@ const String requestVisit = "requestVisit";
 const String forgotPass = "forgotPass";
 const String resaleProperty = "resaleProperty";
 const String resaleClient = "resaleClient";
+const String Addproperty = "Addproperty";
 
 Route<dynamic> controller(RouteSettings settings) {
   switch (settings.name) {
@@ -61,6 +64,9 @@ Route<dynamic> controller(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => const EmiCalcScreen());
     case profilePage:
       return MaterialPageRoute(builder: (context) => const ProfilePage());
+    case Addproperty:
+      return MaterialPageRoute(builder: (context) => const Addpropertylist());
+
     case loanApplicationPage:
       return MaterialPageRoute(
           builder: (context) => const LoanApplicationScreen());
