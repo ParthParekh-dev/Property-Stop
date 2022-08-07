@@ -1,9 +1,15 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:form_builder_file_picker/form_builder_file_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:propertystop/models/request/add_property_request.dart';
+import 'package:propertystop/services/network_service.dart';
 import 'package:propertystop/utils/constants.dart' as constants;
+import 'package:propertystop/utils/custom_dialog.dart';
 
 class ResalePropertyPage extends StatefulWidget {
   const ResalePropertyPage({Key? key}) : super(key: key);
@@ -120,8 +126,35 @@ class _ResalePropertyPageState extends State<ResalePropertyPage> {
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: () async {
-                        // print(_nearbyPlacesFormKey
-                        //     .currentState?.fields['is_park_garden']?.value);
+                        var result = await NetworkService().addPropertyResale(
+                            AddPropertyRequest(
+                                addAppResalePropClient:
+                                    "addAppResalePropClient",
+                                mobileNumber: "mobileNumber",
+                                propertyType: "propertyType",
+                                projectName: "projectName",
+                                propAbout: "propAbout",
+                                buildFloors: "buildFloors",
+                                propRooms: "propRooms",
+                                propCarpetArea: "propCarpetArea",
+                                propPrice: "propPrice"));
+
+                        if (json.decode(result!)['success'] == "0") {
+                          await Dialogs.infoDialog(
+                            json.decode(result)['message'],
+                          );
+                          return;
+                        } else {
+                          Navigator.of(context).pop();
+                          Fluttertoast.showToast(
+                            msg: "Details Saved Successfully!",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.BOTTOM,
+                            timeInSecForIosWeb: 1,
+                            fontSize: 16.0,
+                          );
+                          return;
+                        }
                       },
                       child: const Text(
                         "Save Details",

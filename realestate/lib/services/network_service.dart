@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:propertystop/models/request/add_property_request.dart';
 import 'package:propertystop/models/request/register_user_request.dart';
 import 'package:propertystop/models/response/property_detail_response.dart';
 import 'package:propertystop/models/response/propery_list_response.dart';
@@ -291,6 +292,44 @@ class NetworkService {
     } else {
       Get.snackbar('Something went wrong,Please try again later',
           'Error #8 ${response.statusCode}',
+          backgroundColor: Colors.white,
+          duration: const Duration(seconds: 2),
+          snackPosition: SnackPosition.BOTTOM);
+      return null;
+    }
+  }
+
+  Future<String?> addPropertyResale(
+      AddPropertyRequest addPropertyRequest) async {
+    var url = Uri.parse('${constants.baseUrl}/addAppResalePropClient');
+
+    var request = http.MultipartRequest('POST', url);
+    request.fields.addAll({
+      'addAppResalePropClient': 'addAppResalePropClient',
+      'mobile_number': addPropertyRequest.mobileNumber,
+      'property_type': addPropertyRequest.propertyType,
+      'project_name': addPropertyRequest.projectName,
+      'prop_about': addPropertyRequest.propAbout,
+      'build_floors': addPropertyRequest.buildFloors,
+      'prop_rooms': addPropertyRequest.propRooms,
+      'prop_carpet_area': addPropertyRequest.propCarpetArea,
+      'prop_price': addPropertyRequest.propPrice
+    });
+
+    var streamedResponse =
+        await request.send().timeout(const Duration(seconds: 20));
+
+    var response = await http.Response.fromStream(streamedResponse);
+
+    debugPrint(url.toString());
+    debugPrint("addPropertyResale\n" + response.statusCode.toString());
+    debugPrint("addPropertyResale\n" + response.body);
+
+    if (response.statusCode == 200) {
+      return ((response.body));
+    } else {
+      Get.snackbar('Something went wrong,Please try again later',
+          'Error #9 ${response.statusCode}',
           backgroundColor: Colors.white,
           duration: const Duration(seconds: 2),
           snackPosition: SnackPosition.BOTTOM);
