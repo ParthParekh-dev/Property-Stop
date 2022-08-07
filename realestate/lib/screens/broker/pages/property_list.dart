@@ -21,6 +21,8 @@ class BrokerPropertyListPage extends StatefulWidget {
 class _BrokerPropertyListPageState extends State<BrokerPropertyListPage> {
   String? locality;
   final controller = PropertyListViewModel();
+  TextEditingController mobileNumberInput = TextEditingController();
+
 
   getLocation() async {
     Placemark? p = await getAddressFromLatLong(null, null);
@@ -127,7 +129,12 @@ class _BrokerPropertyListPageState extends State<BrokerPropertyListPage> {
                           borderRadius: BorderRadius.circular(8),
                           elevation: 5,
                           child: TextFormField(
-                            // controller: mobileNumberInput,
+                            onChanged:(text) {
+                              setState(() {
+                                  print(text);
+                              });
+                            },
+                             controller: mobileNumberInput,
                             style: const TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w500,
@@ -204,10 +211,29 @@ class _BrokerPropertyListPageState extends State<BrokerPropertyListPage> {
                             physics: const BouncingScrollPhysics(),
                             itemCount: controller.propertyList.length,
                             itemBuilder: ((context, index) {
-                              Datum property = controller.propertyList[index];
-                              return BrokerPropertyListCard(
-                                property: property,
-                              );
+                              Datum  property;
+                              if (controller.propertyList.value[index].projectName
+                                  .toString()
+                                  .toLowerCase()
+                                  .contains(mobileNumberInput.value.text
+                                  .toLowerCase())||controller.propertyList.value[index].propAddress
+                                  .toString()
+                                  .toLowerCase()
+                                  .contains(mobileNumberInput.value.text
+                                  .toLowerCase()) )
+                                {
+                                  print(controller.propertyList.value[index].projectName);
+                                  property  = controller.propertyList[index];
+                                  return BrokerPropertyListCard(
+                                    property: property,
+                                  );
+
+                                }
+                              else
+                                {
+                                  return Container();
+                                }
+
                             }),
                           ),
                   )),
