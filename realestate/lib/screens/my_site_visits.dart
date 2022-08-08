@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:propertystop/utils/constants.dart' as constants;
 import 'package:propertystop/controllers/my_site_visit_viewmodel.dart';
 
 class MySiteVisits extends StatefulWidget {
@@ -36,181 +37,179 @@ class _MySiteVisitsState extends State<MySiteVisits> {
             var h=MediaQuery.of(context).size.height;
             Color primaryColor = const Color(0xff1f7396);
             return
-                   Container(
-                     width: w,
-                     margin: const EdgeInsets.all(5.0),
-                     child: Card(
-                       elevation: 3.0,
-                       shape: const RoundedRectangleBorder(
-                           borderRadius: BorderRadius.all(
-                               Radius.circular(14.0))),
-                       child:            Column(
-                         mainAxisAlignment:
-                         MainAxisAlignment.spaceEvenly,
-                         children: [
+              Container(
+                margin: const EdgeInsets.symmetric(vertical: 20),
+                // height: 250,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: const [
+                    BoxShadow(
+                      offset: Offset(0, 2),
+                      blurRadius: 12,
+                      color: Colors.black12,
+                    ),
+                  ],
+                ),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 8.0,
+                        horizontal: 10.0,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            child: Text(
+                              controller.siteVisits.value[index].projectName,
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w600,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
+                      child: Row(
+                        children: [
+                          Icon(
+                           Icons.person,
+                            color: Colors.black87,
+                            size: 18,
+                          ),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          Expanded(
+                            child: Text(
+                             controller.siteVisits.value[index].fullName,
+                              style: const TextStyle(
+                                color: Colors.black87,
+                                fontSize: 15,
+                                fontWeight: FontWeight.w500,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
+                      child: Row(
+                        children: [
+                          const Icon(
+                            Icons.contact_page,
+                            color: Colors.black87,
+                            size: 18,
+                          ),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          Expanded(
+                            child: Text(
+                              controller.siteVisits.value[index].contact,
+                              style: const TextStyle(
+                                color: Colors.black87,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w500,
+                                overflow: TextOverflow.clip,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
+                      child: Row(
+                        children: [
+                          const Icon(
+                            Icons.calendar_month,
+                            color: Colors.black87,
+                            size: 18,
+                          ),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          Expanded(
+                            child: Text(
+                              controller.siteVisits.value[index].enquiryDate,
+                              style: const TextStyle(
+                                color: Colors.black87,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w500,
+                                overflow: TextOverflow.clip,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
+                      child: Row(
+                        children: [
+                          const Icon(
+                            Icons.calendar_month,
+                            color: Colors.black87,
+                            size: 18,
+                          ),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          Expanded(
+                            child: Text(
+                              controller.siteVisits.value[index].visitDate,
+                              style: const TextStyle(
+                                color: Colors.black87,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w500,
+                                overflow: TextOverflow.clip,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
+                      child: Row(
+                        children: [
+                          const Icon(
+                            Icons.timer,
+                            color: Colors.black87,
+                            size: 18,
+                          ),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          Expanded(
+                            child: Text(
+                              controller.siteVisits.value[index].visitDate,
+                              style: const TextStyle(
+                                color: Colors.black87,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w500,
+                                overflow: TextOverflow.clip,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
 
-                           const Divider(),
-                           Padding(
-                             padding: const EdgeInsets.all(8.0),
-                             child: Row(
-                               children: [
-                                  Text(
-                                   "Name : ",
-                                   style: TextStyle(
-                                       color: Colors.black54,
-                                       fontSize: 13.0,
-                                       fontWeight:
-                                       FontWeight.bold),
-                                 ),
-                                 Text(
-                                   controller.siteVisits.value[index].fullName.toString(),
-                                   style: TextStyle(
-                                       color: Colors
-                                           .black54,
-                                       fontSize: 15.0,
-                                       fontWeight:
-                                       FontWeight.bold),
-                                 )
-                               ],
-                             ),
-                           ),
-                           const Divider(),
-                           Padding(
-                             padding: const EdgeInsets.all(8.0),
-                             child: Row(
-                               mainAxisAlignment:
-                               MainAxisAlignment
-                                   .spaceBetween,
-                               children: [
-                                 Row(
-                                   children: [
-                                     const Text(
-                                       "Visit Time : ",
-                                       style: TextStyle(
-                                           color: Colors
-                                               .black54,
-                                           fontSize: 13.0,
-                                           fontWeight:
-                                           FontWeight
-                                               .bold),
-                                     ),
-                                     Text(
-                                         controller.siteVisits.value[index].visitTime.toString() ,
-                                       style: TextStyle(
-                                           color: Colors
-                                               .black54,
-                                           fontSize: 15.0,
-                                           fontWeight:
-                                           FontWeight
-                                               .bold),
-                                     )
-                                   ],
-                                 ),
-                               ],
-                             ),
-                           ),
-                           const Divider(),
-                           Padding(
-                             padding: const EdgeInsets.all(8.0),
-                             child: Row(
-                               mainAxisAlignment:
-                               MainAxisAlignment
-                                   .spaceBetween,
-                               children: [
-                                 Row(
-                                   children: [
-                             const Text(
-                             "Contact Number : ",
-                               style: TextStyle(
-                                   color: Colors
-                                       .black54,
-                                   fontSize: 13.0,
-                                   fontWeight:
-                                   FontWeight
-                                       .bold),
-                             ),
-                                     SizedBox(
-                                       width: w * 0.02,
-                                     ),
-                                     Text(
-                                       controller.siteVisits.value[index].contact.toString(),
-                                       style: const TextStyle(
-                                           color: Colors
-                                               .black54,
-                                           fontSize: 16.0,
-                                           fontWeight:
-                                           FontWeight
-                                               .bold),
-                                     )
-                                   ],
-                                 ),
-                               ],
-                             ),
-                           ),
-                           const Divider(),
-                           Padding(
-                             padding: const EdgeInsets.all(8.0),
-                             child: Row(
-                               mainAxisAlignment:
-                               MainAxisAlignment
-                                   .spaceBetween,
-                               children: [
-                                 Row(
-                                   children: [
-                                     const Text(
-                                       "Enquiry Date : ",
-                                       style: TextStyle(
-                                           color: Colors
-                                               .black54,
-                                           fontSize: 13.0,
-                                           fontWeight:
-                                           FontWeight
-                                               .bold),
-                                     ),
-                                     SizedBox(
-                                       width: w * 0.01,
-                                     ),
-                                     Text(
-
-                                         controller.siteVisits.value[index].enquiryDate.toString(),
-                                         style: const TextStyle(
-                                             color: Colors
-                                                 .black54)),
-                                   ],
-                                 ),
-
-                                 Row(
-                                   children: [
-                                     const Text(
-                                       "Visit Date : ",
-                                       style: TextStyle(
-                                           color: Colors
-                                               .black54,
-                                           fontSize: 13.0,
-                                           fontWeight:
-                                           FontWeight
-                                               .bold),
-                                     ),
-                                     SizedBox(
-                                       width: w * 0.01,
-                                     ),
-                                     Text(
-
-                                         controller.siteVisits.value[index].visitDate.toString(),
-                                         style: const TextStyle(
-                                             color: Colors
-                                                 .black54)),
-                                   ],
-                                 )
-                               ],
-                             ),
-                           ),
-                         ],
-                       ),
-
-
-                     ),
-                   );
+                  ],
+                ),
+              );
 //               Card(
 //                 child: Column(
 //                   children: [

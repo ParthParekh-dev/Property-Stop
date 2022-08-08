@@ -19,6 +19,7 @@ class Addpropertylist extends StatefulWidget {
 
 class _AddpropertylistState extends State<Addpropertylist> {
   String? room;
+  String? resel;
   TextEditingController project_name = TextEditingController();
   TextEditingController prop_about = TextEditingController();
   TextEditingController build_floors = TextEditingController();
@@ -107,6 +108,49 @@ class _AddpropertylistState extends State<Addpropertylist> {
                                 value: room,
                                 hint: const Text(
                                   "Select Room",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                decoration: InputDecoration(
+                                  contentPadding: const EdgeInsets.all(12),
+                                  filled: true,
+                                  fillColor: constants.FIELD_COLOR,
+                                  border: OutlineInputBorder(
+                                    borderSide: BorderSide.none,
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  hintText: "Room",
+                                  hintStyle: const TextStyle(
+                                    fontSize: 14,
+                                  ),
+                                ),
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: SizedBox(
+                              width: double.infinity - 50,
+                              child: DropdownButtonFormField<String>(
+                                isExpanded: false,
+                                items: [
+                                  buildMenuItem("resale_property "),
+                                  buildMenuItem("resale_client"),
+                                  ],
+                                onChanged: (value) => setState(() {
+                                  resel = value;
+                                }),s
+                                value: resel,
+                                hint: const Text(
+                                  "Select ResaleType",
                                   style: TextStyle(
                                     fontSize: 16,
                                   ),
@@ -226,7 +270,7 @@ class _AddpropertylistState extends State<Addpropertylist> {
                                 if (prop_price.value.text != "" &&
                                     build_floors.value.text != "" &&
                                     project_name.value.text != "" &&
-                                    room != null &&
+                                    room != null &&resel != null &&
                                     prop_about.value.text != "" &&
                                     prop_carpet_area.value.text != "")
                                   {
