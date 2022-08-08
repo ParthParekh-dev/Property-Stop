@@ -95,7 +95,9 @@ class _AddpropertylistState extends State<Addpropertylist> {
                                 items: [
                                   buildMenuItem("1 BHK"),
                                   buildMenuItem("2 BHK"),
+                                  buildMenuItem("2.5 BHK"),
                                   buildMenuItem("3 BHK"),
+                                  buildMenuItem("3.5 BHK"),
                                   buildMenuItem("4 BHK"),
                                   buildMenuItem("5 BHK"),
                                   buildMenuItem("6 BHK"),
@@ -147,7 +149,7 @@ class _AddpropertylistState extends State<Addpropertylist> {
                                   ],
                                 onChanged: (value) => setState(() {
                                   resel = value;
-                                }),s
+                                }),
                                 value: resel,
                                 hint: const Text(
                                   "Select ResaleType",
@@ -295,14 +297,21 @@ class _AddpropertylistState extends State<Addpropertylist> {
                                       );
                                       return;
                                     } else {
-                                      Navigator.of(context).pop();
-                                      Fluttertoast.showToast(
-                                        msg: "Details Saved Successfully!",
-                                        toastLength: Toast.LENGTH_SHORT,
-                                        gravity: ToastGravity.BOTTOM,
-                                        timeInSecForIosWeb: 1,
-                                        fontSize: 16.0,
+
+                                      showDialog<String>(
+                                        context: context,
+                                        builder: (BuildContext context) => AlertDialog(
+                                          title: const Text('Sucess'),
+                                          content: Text(json.decode(result)['message']),
+                                          actions: <Widget>[
+                                            TextButton(
+                                              onPressed: () => Navigator.pop(context, 'OK'),
+                                              child: const Text('OK'),
+                                            ),
+                                          ],
+                                        ),
                                       );
+
                                       return;
                                     }
                                   }

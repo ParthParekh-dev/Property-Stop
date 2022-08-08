@@ -101,10 +101,7 @@ class _RequestCallbackBottomSheetState
                                     filled: true,
                                     fillColor: constants.FIELD_COLOR,
                                     contentPadding: const EdgeInsets.all(12),
-                                    hintText: "Jhon Doe",
-                                    hintStyle: const TextStyle(
-                                      fontSize: 16,
-                                    ),
+
                                   ),
                                 ),
                               ),
@@ -153,10 +150,7 @@ class _RequestCallbackBottomSheetState
                                     filled: true,
                                     fillColor: constants.FIELD_COLOR,
                                     contentPadding: const EdgeInsets.all(12),
-                                    hintText: "1234567890",
-                                    hintStyle: const TextStyle(
-                                      fontSize: 16,
-                                    ),
+
                                   ),
                                 ),
                               ),
@@ -196,10 +190,7 @@ class _RequestCallbackBottomSheetState
                                     filled: true,
                                     fillColor: constants.FIELD_COLOR,
                                     contentPadding: const EdgeInsets.all(12),
-                                    hintText: "some@example.com",
-                                    hintStyle: const TextStyle(
-                                      fontSize: 16,
-                                    ),
+
                                   ),
                                 ),
                               ),
@@ -326,7 +317,7 @@ class _RequestCallbackBottomSheetState
                                     'message': "",
                                     'request_prop_id': widget.propertyId
                                   });
-
+            print(request.fields);
                                   try {
                                     context.loaderOverlay.show();
 

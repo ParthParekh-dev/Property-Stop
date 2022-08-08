@@ -36,6 +36,7 @@ class _BrokerPropertyDetailPageState extends State<BrokerPropertyDetailPage> {
   void initState() {
     super.initState();
     controller.getPropertyDetail(widget.property.uniqueId);
+    print(controller.propDetails.value);
   }
 
   @override

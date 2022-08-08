@@ -344,14 +344,19 @@ class _LoanApplicationScreenState extends State<LoanApplicationScreen> {
         }
       } else {
         context.loaderOverlay.hide();
-        Fluttertoast.showToast(
-            msg: jason["success"],
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.CENTER,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-            fontSize: 16.0);
+        showDialog<String>(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+            title: const Text('Sucess'),
+            content: Text(jason["message"].toString()),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.pop(context, 'OK'),
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+        );
         return null;
       }
     } catch (e) {

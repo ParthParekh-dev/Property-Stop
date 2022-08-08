@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 // import 'package:propertystop/screens/broker/pages/my_properties.dart';
 import 'package:propertystop/screens/broker/pages/others_page.dart';
 import 'package:propertystop/screens/broker/pages/property_list.dart';
@@ -18,7 +19,6 @@ class BrokerHomeScreen extends StatefulWidget {
 
 class _BrokerHomeScreenState extends State<BrokerHomeScreen> {
   int _selectedIndex = 0;
-
   final List<Widget> _children = [
     const BrokerPropertyListPage(),
     const ResalePage(),
@@ -35,7 +35,9 @@ class _BrokerHomeScreenState extends State<BrokerHomeScreen> {
     final dialogAction = await Dialogs.yesNoAlertDialog(
         "Confirmation", "Are you sure you want to exit the app");
     if (dialogAction == DialogAction.yes) {
-      Navigator.of(context).pop(true);
+      Future.delayed(const Duration(milliseconds: 1000), () {
+        SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+      });
     }
     return false;
   }

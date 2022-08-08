@@ -15,7 +15,7 @@ class PropertyDetailViewModel extends GetxController {
   Future<void> getPropertyDetail(String propertyId) async {
     isLoading(true);
     var result = await NetworkService().getPropertyDetail(propertyId);
-
+print(result);
     try {
       if (result != null) {
         propertyDetail.value = result;

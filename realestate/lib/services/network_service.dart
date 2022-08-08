@@ -315,6 +315,7 @@ print(request.fields);
       'prop_carpet_area': addPropertyRequest.propCarpetArea,
       'prop_price': addPropertyRequest.propPrice
     });
+    print(request.fields);
 
     var streamedResponse =
         await request.send().timeout(const Duration(seconds: 20));
