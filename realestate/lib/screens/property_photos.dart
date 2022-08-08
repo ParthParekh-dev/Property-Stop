@@ -1,30 +1,15 @@
 import 'package:flutter/material.dart';
 
-class PhotoItem {
-  final String image;
-  PhotoItem(this.image);
-}
-
 class PropertyPhotos extends StatelessWidget {
-  final List<PhotoItem> _items = [
-    PhotoItem("https://picsum.photos/200/300?random=1"),
-    PhotoItem("https://picsum.photos/200/300?random=2"),
-    PhotoItem("https://picsum.photos/200/300?random=3"),
-    PhotoItem("https://picsum.photos/200/300?random=4"),
-    PhotoItem("https://picsum.photos/200/300?random=5"),
-    PhotoItem("https://picsum.photos/200/300?random=6"),
-    PhotoItem("https://picsum.photos/200/300?random=7"),
-    PhotoItem("https://picsum.photos/200/300?random=8"),
-    PhotoItem("https://picsum.photos/200/300?random=9"),
-    PhotoItem("https://picsum.photos/200/300?random=10"),
-    PhotoItem("https://picsum.photos/200/300?random=11"),
-  ];
+  PropertyPhotos({Key? key, required this.imageUrls}) : super(key: key);
+
+  final List<dynamic> imageUrls;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Photos️'),
+        title: const Text('Photos'),
       ),
       body: GridView.builder(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -32,7 +17,7 @@ class PropertyPhotos extends StatelessWidget {
           mainAxisSpacing: 0,
           crossAxisCount: 3,
         ),
-        itemCount: _items.length,
+        itemCount: imageUrls.length,
         itemBuilder: (context, index) {
           return GestureDetector(
             onTap: () {
@@ -40,7 +25,7 @@ class PropertyPhotos extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                   builder: (context) =>
-                      RouteTwo(image: _items[index].image, name: ""),
+                      RouteTwo(image: imageUrls[index]["url"], name: ""),
                 ),
               );
             },
@@ -48,7 +33,7 @@ class PropertyPhotos extends StatelessWidget {
               decoration: BoxDecoration(
                 image: DecorationImage(
                   fit: BoxFit.cover,
-                  image: NetworkImage(_items[index].image),
+                  image: NetworkImage(imageUrls[index]["url"]),
                 ),
               ),
             ),

@@ -7,6 +7,7 @@ import 'package:propertystop/controllers/property_detail_viewmodel.dart';
 import 'package:propertystop/models/response/propery_list_response.dart';
 import 'package:propertystop/screens/broker/models/property.dart';
 import 'package:propertystop/screens/property_photos.dart';
+import 'package:propertystop/screens/realestate_webview.dart';
 import 'package:propertystop/screens/request_callback_bottomsheet.dart';
 import 'package:propertystop/screens/request_visit_bottomsheet.dart';
 import 'package:propertystop/screens/youtube_videos.dart';
@@ -101,7 +102,7 @@ class _BrokerPropertyDetailPageState extends State<BrokerPropertyDetailPage> {
                             //     pageSnapping: true,
                             //   ),
                             // ),
-                            child: Image.asset(
+                            child: Image.network(
                               controller
                                   .propertyDetail.value!.propData[0].thumbnail,
                               fit: BoxFit.cover,
@@ -200,34 +201,45 @@ class _BrokerPropertyDetailPageState extends State<BrokerPropertyDetailPage> {
                             const SizedBox(
                               height: 12,
                             ),
-                            OutlinedButton(
-                              style: OutlinedButton.styleFrom(
-                                side: const BorderSide(
-                                    color: Colors.black, width: 1),
-                                padding: const EdgeInsets.all(12.0),
-                              ),
-                              onPressed: () {},
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: const [
-                                  Icon(
-                                    Icons.download,
-                                    color: Colors.black,
-                                  ),
-                                  Text(
-                                    "Download Brochure",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: Colors.black87,
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.w500,
-                                      overflow: TextOverflow.clip,
+                            if (Uri.tryParse(widget.property.downloadBrochure
+                                        .toString())
+                                    ?.hasAbsolutePath ??
+                                false)
+                              OutlinedButton(
+                                style: OutlinedButton.styleFrom(
+                                  side: const BorderSide(
+                                      color: Colors.black, width: 1),
+                                  padding: const EdgeInsets.all(12.0),
+                                ),
+                                onPressed: () {
+                                  Get.to(() => RealEstateWebView(
+                                        pageUrl: widget
+                                            .property.downloadBrochure
+                                            .toString(),
+                                        title: 'Brochure',
+                                      ));
+                                },
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: const [
+                                    Icon(
+                                      Icons.download,
+                                      color: Colors.black,
                                     ),
-                                  ),
-                                ],
-                              ),
-                            )
+                                    Text(
+                                      "Download Brochure",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Colors.black87,
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w500,
+                                        overflow: TextOverflow.clip,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              )
                           ],
                         ),
                       ),
@@ -245,7 +257,11 @@ class _BrokerPropertyDetailPageState extends State<BrokerPropertyDetailPage> {
                               Expanded(
                                 child: GestureDetector(
                                   onTap: () {
-                                    Get.to(() => PropertyPhotos());
+                                    Get.to(
+                                        () => PropertyPhotos(
+                                            imageUrls: controller
+                                                .propertyDetail.value!.images),
+                                        transition: Transition.rightToLeft);
                                   },
                                   child: Container(
                                     padding: const EdgeInsets.symmetric(
@@ -638,33 +654,40 @@ class _BrokerPropertyDetailPageState extends State<BrokerPropertyDetailPage> {
                               carouselController: _controller,
                               items: List.generate(
                                 controller.propertyDetail.value!.floors.length,
-                                (index) => Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 12),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(5),
-                                    child: Image.asset(
-                                      controller.propertyDetail.value!
-                                          .floors[index].url,
-                                      fit: BoxFit.cover,
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.3, // 35%
-                                      width: MediaQuery.of(context).size.width,
-                                      errorBuilder: (BuildContext context,
-                                          Object exception,
-                                          StackTrace? stackTrace) {
-                                        return Image.asset(
-                                            'assets/no_image.png',
-                                            fit: BoxFit.cover,
-                                            height: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
+                                (index) => GestureDetector(
+                                  onTap: () {
+                                    print(controller.propertyDetail.value!
+                                        .floors[index].url);
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 12),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(5),
+                                      child: Image.network(
+                                        controller.propertyDetail.value!
+                                            .floors[index].url,
+                                        fit: BoxFit.cover,
+                                        height:
+                                            MediaQuery.of(context).size.height *
                                                 0.3, // 35%
-                                            width: MediaQuery.of(context)
-                                                .size
-                                                .width);
-                                      },
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        errorBuilder: (BuildContext context,
+                                            Object exception,
+                                            StackTrace? stackTrace) {
+                                          return Image.asset(
+                                              'assets/no_image.png',
+                                              fit: BoxFit.cover,
+                                              height: MediaQuery.of(context)
+                                                      .size
+                                                      .height *
+                                                  0.3, // 35%
+                                              width: MediaQuery.of(context)
+                                                  .size
+                                                  .width);
+                                        },
+                                      ),
                                     ),
                                   ),
                                 ),
