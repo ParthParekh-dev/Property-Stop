@@ -17,7 +17,7 @@ class _MySiteVisitsState extends State<MySiteVisits> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("My site visits 1")),
+      appBar: AppBar(title: const Text("My site visits")),
       body: Obx(() => (controller.isLoading.value)
           ? Column(
         mainAxisAlignment: MainAxisAlignment.center,

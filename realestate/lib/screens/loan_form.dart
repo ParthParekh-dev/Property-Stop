@@ -15,10 +15,10 @@ class LoanApplicationScreen extends StatefulWidget {
 }
 
 class _LoanApplicationScreenState extends State<LoanApplicationScreen> {
-  final employmentTypes = ["Self Employed", "Salaried"];
+  final employmentTypes = ["", ""];
   String? employmentType;
   bool isloading = true;
-
+  final GlobalKey<FormFieldState> _key = GlobalKey<FormFieldState>();
   TextEditingController fullNameInput = TextEditingController();
   TextEditingController emailAddressInput = TextEditingController();
   TextEditingController mobileNumberInput = TextEditingController();
@@ -146,8 +146,10 @@ class _LoanApplicationScreenState extends State<LoanApplicationScreen> {
                        SizedBox(
                          width: double.infinity - 50,
                          child: DropdownButtonFormField<String>(
+                           key: _key,
                            isExpanded: false,
-                           items: employmentTypes.map(buildMenuItem).toList(),
+                           items: [buildMenuItem("Self Employed"),
+                             buildMenuItem("Salaried"),],
                            onChanged: (value) => setState(() {
                              employmentType = value;
                            }),
@@ -324,9 +326,7 @@ class _LoanApplicationScreenState extends State<LoanApplicationScreen> {
           mobileNumberInput.clear();
           emailAddressInput.clear();
           loanUptoInput.clear();
-          setState(() {
-            employmentType = employmentTypes.first;
-          });
+          _key.currentState?.reset();
         } else {
           showDialog<String>(
             context: context,

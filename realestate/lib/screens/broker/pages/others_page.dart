@@ -9,6 +9,8 @@ import 'package:propertystop/utils/constants.dart' as constants;
 import 'package:propertystop/utils/router.dart' as router;
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../utils/custom_dialog.dart';
+
 class BrokerOthersPage extends StatefulWidget {
   const BrokerOthersPage({Key? key}) : super(key: key);
 
@@ -52,12 +54,18 @@ class _BrokerOthersPageState extends State<BrokerOthersPage> {
             IconButton(
               onPressed: () async {
                 final prefs = await SharedPreferences.getInstance();
-                prefs.clear();
-                Navigator.pushNamedAndRemoveUntil(
-                  context,
-                  router.optionsPage,
-                  (route) => false,
-                );
+
+    final dialogAction = await Dialogs.yesNoAlertDialog(
+    "Confirmation",
+    "Are you sure you want to request for call back from our team?");
+    if (dialogAction == DialogAction.yes) {
+      prefs.clear();
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        router.optionsPage,
+            (route) => false,
+      );
+    }
               },
               icon: const Icon(Icons.exit_to_app),
             ),

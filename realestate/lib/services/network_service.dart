@@ -248,8 +248,7 @@ class NetworkService {
     request.fields
         .addAll({'device': 'Mobile', 'mobile_number': mobile.toString()});
 
-    var streamedResponse =
-        await request.send().timeout(const Duration(seconds: 20));
+    var streamedResponse = await request.send().timeout(const Duration(seconds: 20));
 
     var response = await http.Response.fromStream(streamedResponse);
 

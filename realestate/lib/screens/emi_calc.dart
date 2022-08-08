@@ -12,7 +12,7 @@ class EmiCalcScreen extends StatefulWidget {
 }
 
 class _EmiCalcScreenState extends State<EmiCalcScreen> {
-  double loanAmt = 1000000;
+  double loanAmt = 5000000;
   double roi = 6;
   double tenure = 1;
 
@@ -81,12 +81,12 @@ class _EmiCalcScreenState extends State<EmiCalcScreen> {
                         ),
                         Row(
                           children: [
-                            const Text("₹ 1 Lac"),
+                            const Text("₹ 50 Lac"),
                             Expanded(
                               child: Slider(
                                 value: loanAmt,
-                                min: 100000,
-                                max: 100000000,
+                                min: 5000000,
+                                max: 200000000,
                                 onChanged: (value) {
                                   setState(() {
                                     loanAmt = value;
@@ -96,7 +96,7 @@ class _EmiCalcScreenState extends State<EmiCalcScreen> {
                                 divisions: 50,
                               ),
                             ),
-                            const Text("₹ 10 Cr")
+                            const Text("₹ 20 Cr")
                           ],
                         ),
                         const SizedBox(

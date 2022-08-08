@@ -223,7 +223,9 @@ class BrokerPropertyListCard extends StatelessWidget {
                   ),
                   Expanded(
                     child: OutlinedButton(
-                      onPressed: () {},
+                      onPressed: () {
+
+                      },
                       child: const Text(
                         "Download Brochure",
                         style: TextStyle(
