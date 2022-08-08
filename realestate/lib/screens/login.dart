@@ -9,6 +9,7 @@ import 'package:propertystop/services/network_service.dart';
 import 'package:propertystop/utils/constants.dart' as constants;
 import 'package:propertystop/utils/custom_dialog.dart';
 import 'package:propertystop/utils/router.dart' as router;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -248,6 +249,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                 );
                                 return;
                               }
+
+                              final prefs =
+                                  await SharedPreferences.getInstance();
+                              prefs.setBool(constants.isLoggedIn, true);
+                              prefs.setString(constants.mobileNumber,
+                                  mobileNumberInput.text);
 
                               // Login Success
                               Fluttertoast.showToast(

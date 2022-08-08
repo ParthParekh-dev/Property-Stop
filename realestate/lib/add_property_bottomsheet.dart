@@ -10,6 +10,7 @@ import 'package:propertystop/utils/constants.dart' as constants;
 import 'package:propertystop/utils/custom_dialog.dart';
 
 import 'models/request/add_property_request.dart';
+
 class Addpropertylist extends StatefulWidget {
   const Addpropertylist({Key? key}) : super(key: key);
 
@@ -28,8 +29,7 @@ class _AddpropertylistState extends State<Addpropertylist> {
 
   @override
   Widget build(BuildContext context) {
-    return
-    Container(
+    return Container(
       height: MediaQuery.of(context).size.height * 0.85,
       decoration: const BoxDecoration(
         borderRadius: BorderRadius.only(
@@ -56,9 +56,17 @@ class _AddpropertylistState extends State<Addpropertylist> {
                         children: [
                           Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: Text("I have a resale property" ,style: TextStyle(fontSize: 15,fontWeight: FontWeight.bold,color: Colors.black),),
+                            child: Text(
+                              "I have a resale property",
+                              style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black),
+                            ),
                           ),
-                          SizedBox(height: 10,),
+                          SizedBox(
+                            height: 10,
+                          ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: TextField(
@@ -67,7 +75,7 @@ class _AddpropertylistState extends State<Addpropertylist> {
                                 fontWeight: FontWeight.w500,
                               ),
                               controller: project_name,
-                              decoration:InputDecoration(
+                              decoration: InputDecoration(
                                 contentPadding: const EdgeInsets.all(12),
                                 filled: true,
                                 fillColor: constants.FIELD_COLOR,
@@ -82,7 +90,6 @@ class _AddpropertylistState extends State<Addpropertylist> {
                               ),
                             ),
                           ),
-
                           const SizedBox(
                             height: 15,
                           ),
@@ -95,9 +102,7 @@ class _AddpropertylistState extends State<Addpropertylist> {
                                 items: [
                                   buildMenuItem("1 BHK"),
                                   buildMenuItem("2 BHK"),
-                                  buildMenuItem("2.5 BHK"),
                                   buildMenuItem("3 BHK"),
-                                  buildMenuItem("3.5 BHK"),
                                   buildMenuItem("4 BHK"),
                                   buildMenuItem("5 BHK"),
                                   buildMenuItem("6 BHK"),
@@ -146,13 +151,13 @@ class _AddpropertylistState extends State<Addpropertylist> {
                                 items: [
                                   buildMenuItem("resale_property "),
                                   buildMenuItem("resale_client"),
-                                  ],
+                                ],
                                 onChanged: (value) => setState(() {
                                   resel = value;
                                 }),
                                 value: resel,
                                 hint: const Text(
-                                  "Select ResaleType",
+                                  "Select Resale Type",
                                   style: TextStyle(
                                     fontSize: 16,
                                   ),
@@ -177,13 +182,15 @@ class _AddpropertylistState extends State<Addpropertylist> {
                               ),
                             ),
                           ),
-                          SizedBox(height: 10,),
+                          SizedBox(
+                            height: 10,
+                          ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: TextField(
                               controller: prop_price,
                               keyboardType: TextInputType.number,
-                              decoration:InputDecoration(
+                              decoration: InputDecoration(
                                 contentPadding: const EdgeInsets.all(12),
                                 filled: true,
                                 fillColor: constants.FIELD_COLOR,
@@ -198,7 +205,9 @@ class _AddpropertylistState extends State<Addpropertylist> {
                               ),
                             ),
                           ),
-                          SizedBox(height: 10,),
+                          SizedBox(
+                            height: 10,
+                          ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: TextField(
@@ -219,12 +228,14 @@ class _AddpropertylistState extends State<Addpropertylist> {
                               ),
                             ),
                           ),
-                          SizedBox(height: 10,),
+                          SizedBox(
+                            height: 10,
+                          ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: TextField(
                               controller: build_floors,
-                              keyboardType:TextInputType.number,
+                              keyboardType: TextInputType.number,
                               decoration: InputDecoration(
                                 contentPadding: const EdgeInsets.all(12),
                                 filled: true,
@@ -240,7 +251,9 @@ class _AddpropertylistState extends State<Addpropertylist> {
                               ),
                             ),
                           ),
-                        SizedBox(height: 10,),
+                          SizedBox(
+                            height: 10,
+                          ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: TextField(
@@ -267,68 +280,53 @@ class _AddpropertylistState extends State<Addpropertylist> {
                             width: double.infinity,
                             child: ElevatedButton(
                               onPressed: () async {
-
-
                                 if (prop_price.value.text != "" &&
                                     build_floors.value.text != "" &&
                                     project_name.value.text != "" &&
-                                    room != null &&resel != null &&
+                                    room != null &&
+                                    resel != null &&
                                     prop_about.value.text != "" &&
-                                    prop_carpet_area.value.text != "")
-                                  {
-                                    context.loaderOverlay.show();
-                                    var result = await NetworkService().addPropertyResale(
-                                        AddPropertyRequest(
-                                            addAppResalePropClient:
-                                            "addAppResalePropClient",
-                                            mobileNumber: "8082019432",
-                                            propertyType: "resale_property",
-                                            projectName: project_name.value.text,
-                                            propAbout: prop_about.value.text,
-                                            buildFloors: build_floors.value.text,
-                                            propRooms: room.toString(),
-                                            propCarpetArea: "propCarpetArea",
-                                            propPrice: prop_price.value.text));
-                                    context.loaderOverlay.hide();
+                                    prop_carpet_area.value.text != "") {
+                                  context.loaderOverlay.show();
+                                  var result = await NetworkService()
+                                      .addPropertyResale(AddPropertyRequest(
+                                          addAppResalePropClient:
+                                              "addAppResalePropClient",
+                                          mobileNumber: "8082019432",
+                                          propertyType: "resale_property",
+                                          projectName: project_name.value.text,
+                                          propAbout: prop_about.value.text,
+                                          buildFloors: build_floors.value.text,
+                                          propRooms: room.toString(),
+                                          propCarpetArea: "propCarpetArea",
+                                          propPrice: prop_price.value.text));
+                                  context.loaderOverlay.hide();
 
-                                    if (json.decode(result!)['success'] == "0") {
-                                      await Dialogs.infoDialog(
-                                        json.decode(result)['message'],
-                                      );
-                                      return;
-                                    } else {
-
-                                      showDialog<String>(
-                                        context: context,
-                                        builder: (BuildContext context) => AlertDialog(
-                                          title: const Text('Sucess'),
-                                          content: Text(json.decode(result)['message']),
-                                          actions: <Widget>[
-                                            TextButton(
-                                              onPressed: () => Navigator.pop(context, 'OK'),
-                                              child: const Text('OK'),
-                                            ),
-                                          ],
-                                        ),
-                                      );
-
-                                      return;
-                                    }
-                                  }
-                                else
-                                  {
+                                  if (json.decode(result!)['success'] == "0") {
+                                    await Dialogs.infoDialog(
+                                      json.decode(result)['message'],
+                                    );
+                                    return;
+                                  } else {
+                                    Navigator.of(context).pop();
                                     Fluttertoast.showToast(
-                                      msg: "Enter All Details",
+                                      msg: "Details Saved Successfully!",
                                       toastLength: Toast.LENGTH_SHORT,
                                       gravity: ToastGravity.BOTTOM,
                                       timeInSecForIosWeb: 1,
                                       fontSize: 16.0,
                                     );
+                                    return;
                                   }
-
-
-
-
+                                } else {
+                                  Fluttertoast.showToast(
+                                    msg: "Enter All Details",
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.BOTTOM,
+                                    timeInSecForIosWeb: 1,
+                                    fontSize: 16.0,
+                                  );
+                                }
                               },
                               child: const Text(
                                 "Save Details",
@@ -359,8 +357,8 @@ class _AddpropertylistState extends State<Addpropertylist> {
         ),
       ),
     );
-
   }
+
   DropdownMenuItem<String> buildMenuItem(String item) {
     return DropdownMenuItem(
       value: item,

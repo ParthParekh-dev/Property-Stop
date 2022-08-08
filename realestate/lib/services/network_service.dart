@@ -5,6 +5,8 @@ import 'package:propertystop/models/request/add_property_request.dart';
 import 'package:propertystop/models/request/register_user_request.dart';
 import 'package:propertystop/models/response/property_detail_response.dart';
 import 'package:propertystop/models/response/propery_list_response.dart';
+import 'package:propertystop/models/response/resale_client_list_response.dart';
+import 'package:propertystop/models/response/resale_property_list_response.dart';
 import 'package:propertystop/models/response/site_visit_response.dart';
 import 'package:propertystop/utils/constants.dart' as constants;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -275,9 +277,8 @@ class NetworkService {
     final prefs = await SharedPreferences.getInstance();
     String? mobile = prefs.getString(constants.mobileNumber);
 
-    request.fields
-        .addAll({'device': 'Mobile', 'mobile_number': "8082019432"});
-print(request.fields);
+    request.fields.addAll({'device': 'Mobile', 'mobile_number': "8082019432"});
+    print(request.fields);
     var streamedResponse =
         await request.send().timeout(const Duration(seconds: 20));
 
@@ -331,6 +332,66 @@ print(request.fields);
     } else {
       Get.snackbar('Something went wrong,Please try again later',
           'Error #9 ${response.statusCode}',
+          backgroundColor: Colors.white,
+          duration: const Duration(seconds: 2),
+          snackPosition: SnackPosition.BOTTOM);
+      return null;
+    }
+  }
+
+  Future<List<ResalePropertyListResponse>?> getResalePropertyList() async {
+    final prefs = await SharedPreferences.getInstance();
+    var mobileNumber = prefs.getString(constants.mobileNumber);
+
+    var url = Uri.parse(
+        '${constants.baseUrl}/showAppResaleProperties?mobile_number=$mobileNumber');
+
+    http.Response response = await http
+        .get(
+          url,
+        )
+        .timeout(const Duration(seconds: 20));
+
+    debugPrint(url.toString());
+    debugPrint("getResalePropertyList\n" + response.statusCode.toString());
+    debugPrint("getResalePropertyList\n" + response.body);
+
+    if (response.statusCode == 200) {
+      return resalePropertyListResponseFromJson(response.body);
+    } else {
+      //show error
+      Get.snackbar('Something went wrong,Please try again later',
+          'Error #10 ${response.statusCode}',
+          backgroundColor: Colors.white,
+          duration: const Duration(seconds: 2),
+          snackPosition: SnackPosition.BOTTOM);
+      return null;
+    }
+  }
+
+  Future<List<ResaleClientListResponse>?> getResaleClientList() async {
+    final prefs = await SharedPreferences.getInstance();
+    var mobileNumber = prefs.getString(constants.mobileNumber);
+
+    var url = Uri.parse(
+        '${constants.baseUrl}/showAppResaleClient?mobile_number=$mobileNumber');
+
+    http.Response response = await http
+        .get(
+          url,
+        )
+        .timeout(const Duration(seconds: 20));
+
+    debugPrint(url.toString());
+    debugPrint("getClientPropertyList\n" + response.statusCode.toString());
+    debugPrint("getClientPropertyList\n" + response.body);
+
+    if (response.statusCode == 200) {
+      return resaleClientListResponseFromJson(response.body);
+    } else {
+      //show error
+      Get.snackbar('Something went wrong,Please try again later',
+          'Error #11 ${response.statusCode}',
           backgroundColor: Colors.white,
           duration: const Duration(seconds: 2),
           snackPosition: SnackPosition.BOTTOM);

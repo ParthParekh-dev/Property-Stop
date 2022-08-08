@@ -24,7 +24,7 @@ class _BrokerHomeScreenState extends State<BrokerHomeScreen> {
     const ResalePage(),
     // const BrokerClientsPage(),
     const RealEstateWebView(
-      pageUrl: 'https://google.com',
+      pageUrl: 'https://propertystop.com',
       title: 'Blogs',
     ),
     const RentalPage(),
