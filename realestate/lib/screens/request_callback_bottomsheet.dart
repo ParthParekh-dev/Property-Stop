@@ -348,13 +348,19 @@ class _RequestCallbackBottomSheetState
                                       } else {
                                         print(profileReq.statusCode);
                                         Navigator.of(context).pop();
-                                        Fluttertoast.showToast(
-                                          msg:
-                                              "Request Submitted Successfully!",
-                                          toastLength: Toast.LENGTH_SHORT,
-                                          gravity: ToastGravity.BOTTOM,
-                                          timeInSecForIosWeb: 1,
-                                          fontSize: 16.0,
+                                        showDialog<String>(
+                                          context: context,
+                                          builder: (BuildContext context) => AlertDialog(
+                                            title: const Text('Sucess'),
+                                            content: Text(json.decode(
+                                                profileReq.body)['message']),
+                                            actions: <Widget>[
+                                              TextButton(
+                                                onPressed: () => Navigator.pop(context, 'OK'),
+                                                child: const Text('OK'),
+                                              ),
+                                            ],
+                                          ),
                                         );
                                         return;
                                       }

@@ -257,16 +257,22 @@ class _LoginScreenState extends State<LoginScreen> {
                                   mobileNumberInput.text);
 
                               // Login Success
-                              Fluttertoast.showToast(
-                                msg: "Successfully Logged In!",
-                                toastLength: Toast.LENGTH_SHORT,
-                                gravity: ToastGravity.BOTTOM,
-                                timeInSecForIosWeb: 1,
-                                fontSize: 16.0,
+                              showDialog<String>(
+                                context: context,
+                                builder: (BuildContext context) => AlertDialog(
+                                  title: const Text('Sucess'),
+                                  content: Text(result["message"].toString()),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      onPressed: () =>  Navigator.of(context).pushNamedAndRemoveUntil(
+                                          router.brokerMain, (route) => false),
+                                      child: const Text('OK'),
+                                    ),
+                                  ],
+                                ),
                               );
 
-                              Navigator.of(context).pushNamedAndRemoveUntil(
-                                  router.brokerMain, (route) => false);
+
                             } catch (e) {
                               // ignore: avoid_print
                               print(e);

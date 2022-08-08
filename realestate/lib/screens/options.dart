@@ -19,12 +19,23 @@ class _OptionsScreenState extends State<OptionsScreen> {
 
   String? selectedOption;
 
+setintro()
+async {
+  final prefs = await SharedPreferences.getInstance();
+  prefs.setString(
+      constants.isIntro,"1");
+}
+
   changeSelectedOption(String s) {
     setState(() {
       selectedOption = s;
     });
   }
-
+@override
+  initState()  {
+  setintro();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
